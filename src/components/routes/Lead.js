@@ -138,14 +138,14 @@ class Lead extends Component {
             open: !open
         })
     }
-    
+
     async onFormValueChanged(name, value) {
-      let lead = this.state.lead;
-      lead.valoresMatriz[name] = value;
-      await DataHandler.updateLead(lead);
-      this.setState({
-        lead
-      });
+        let lead = this.state.lead;
+        lead.valoresMatriz[name] = value;
+        await DataHandler.updateLead(lead);
+        this.setState({
+            lead
+        });
     }
 
     render() {
@@ -162,14 +162,16 @@ class Lead extends Component {
                     <Grid item xs={4} sm={12}>
                         <Grid container>
                             <Grid item xs={4} sm={6}>
-                                <DadosLead lead={lead}/>
+                                <DadosLead lead={lead} editable={true}/>
                             </Grid>
 
                             <Grid item xs={8} sm={6}>
                                 <FormFisico
                                     // javascript things, kind of
-                                    onValueChanged = { (name,value) => { this.onFormValueChanged(name, value); } }
-                                    lead = {lead}
+                                    onValueChanged={(name, value) => {
+                                        this.onFormValueChanged(name, value);
+                                    }}
+                                    lead={lead}
                                 />
                             </Grid>
                         </Grid>
@@ -178,8 +180,9 @@ class Lead extends Component {
                     <Grid item xs={4} sm={12}>
                         <Grid item xs={12} sm={12}>
                             <ListContatos contatos={lead.listaContatos}/>
-                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>Novo
-                                Contato </Button>
+                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>
+                                Novo Contato
+                            </Button>
                         </Grid>
                     </Grid>
 

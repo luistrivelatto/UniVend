@@ -27,7 +27,6 @@ class Home extends Component {
         };
     }
 
-
     async componentDidMount() {
         let leads = await DataHandler.getAllLeads();
         this.setState({
@@ -45,9 +44,6 @@ class Home extends Component {
         this.props.history.push('lead/' + id)
     }
 
-    setColor = () => {
-
-    }
 
     render() {
         const {leads} = this.state
@@ -80,6 +76,7 @@ class Home extends Component {
                                         {leads
                                             .filter((lead) => isLeadPendente(lead))
                                             .map((lead) => (
+
                                                 <TableRow key={lead.id} onClick={() => {
                                                     this.handleClickPendente(lead.id)
                                                 }}>
@@ -93,6 +90,7 @@ class Home extends Component {
                                                     }>
                                                         .....
                                                     </div></TableCell>
+
                                                     <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
                                                     <TableCell>{lead.listaContatos.length}</TableCell>
                                                     <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
@@ -134,6 +132,7 @@ class Home extends Component {
                                             .filter((lead) => isLeadEmAndamento(lead))
                                             .map((lead) => (
                                                 <TableRow key={lead.id} onClick={() => {
+
                                                     this.handleClickAtendimento(lead.id)
                                                 }}>
                                                     <TableCell style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}}>{lead.infoPessoal.nomeConta}</TableCell>
