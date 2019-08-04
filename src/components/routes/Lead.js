@@ -180,8 +180,9 @@ class Lead extends Component {
                     <Grid item xs={4} sm={12}>
                         <Grid item xs={12} sm={12}>
                             <ListContatos contatos={lead.listaContatos}/>
-                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>Novo
-                                Contato </Button>
+                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>
+                                Novo Contato
+                            </Button>
                         </Grid>
                     </Grid>
 
