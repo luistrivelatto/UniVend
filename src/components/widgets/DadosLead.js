@@ -30,7 +30,7 @@ class DadosLead extends Component {
                 <TextField
                     onChange={this.handleChangeInput}
                     name={'nome'}
-                    label="Nome"
+                    label="Telefone"
                     value={lead.infoPessoal.telefone}
                     style={{paddingLeft: 8}}
                     margin="normal"
@@ -40,7 +40,7 @@ class DadosLead extends Component {
                 <TextField
                     onChange={this.handleChangeInput}
                     name={'nome'}
-                    label="Nome"
+                    label="Email"
                     value={lead.infoPessoal.email}
                     style={{paddingLeft: 8}}
                     margin="normal"
@@ -50,7 +50,7 @@ class DadosLead extends Component {
                 <TextField
                     onChange={this.handleChangeInput}
                     name={'nome'}
-                    label="Nome"
+                    label="CPF/CNPJ"
                     value={lead.infoPessoal.CPF_CNPJ}
                     style={{paddingLeft: 8}}
                     margin="normal"
@@ -69,7 +69,7 @@ class DadosLead extends Component {
 
                 <TextField
                     name="Born date"
-                    label="Born date"
+                    label="Data de Nascimento"
                     value={getFormattedDate(lead.infoPessoal.dataNascimento)}
                     InputLabelProps={{shrink: true, required: true}}
                     type="date"
