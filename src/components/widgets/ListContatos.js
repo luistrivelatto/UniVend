@@ -19,9 +19,8 @@ class ListContatos extends Component {
                 {contatos.map((contato) => (
                     <div>
                         <TextField
-                            disabled
                             onChange={this.handleChangeInput}
-                            label="Tipo de Contato"
+                            label="Profissão"
                             value={contato.formaContato}
                             style={{paddingLeft: 8}}
                             margin="normal"
