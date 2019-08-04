@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import {Typography} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 import {getFormattedDate} from '../../utils/utils'
+import { EnumOrigemLead } from '../../model/Lead';
 
 class DadosLead extends Component {
     constructor(props) {
@@ -68,9 +69,11 @@ class DadosLead extends Component {
                 />
 
                 <TextField
-                    name="BornDate"
+                    onChange={this.handleChangeInput}
+                    name={'Data de Nascimento'}
                     label="Data de Nascimento"
                     value={getFormattedDate(lead.infoPessoal.dataNascimento)}
+                    style={{paddingLeft: 8}}
                     InputLabelProps={{shrink: true, required: true}}
                     type="date"
                 />
@@ -80,6 +83,26 @@ class DadosLead extends Component {
                     name={'nacionalidade'}
                     label="Nacionalidade"
                     value={lead.infoPessoal.nacionalidade}
+                    style={{paddingLeft: 8}}
+                    margin="normal"
+                    fullWidth
+                />
+
+                <TextField
+                    onChange={this.handleChangeInput}
+                    name={'origem'}
+                    label="Origem do Lead"
+                    value={EnumOrigemLead.toString[lead.origemLead]}
+                    style={{paddingLeft: 8}}
+                    margin="normal"
+                    fullWidth
+                />
+
+                <TextField
+                    onChange={this.handleChangeInput}
+                    name={'sdr'}
+                    label="SDR atual"
+                    value={lead.nomeSdrResponsavel}
                     style={{paddingLeft: 8}}
                     margin="normal"
                     fullWidth
