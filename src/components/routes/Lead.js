@@ -6,10 +6,18 @@ import ListContatos from '../widgets/ListContatos';
 import DadosLead from '../widgets/DadosLead';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import {ProximaAcao, ContatoLead} from '../../model/Lead';
 import {StatusLeadRepassadoParaVenda, StatusLeadCongelado} from '../../model/StatusLead';
 import FormFisico from "../widgets/FormFisico";
+import Modal from '@material-ui/core/Modal';
+import Card from '@material-ui/core/Card';
+import {Typography} from "@material-ui/core";
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Input from '@material-ui/core/Input';
+
+
 
 class Lead extends Component {
 
@@ -18,10 +26,12 @@ class Lead extends Component {
         this.state = {
             id: props.match.params.id,
             loading: true,
-            lead: {}
+            lead: {},
+            open: false,
+            tipo: 0
         };
     }
-
+    
     async componentDidMount() {
         let lead = (await DataHandler.getLeadFromId(this.state.id));
         this.setState({
@@ -77,8 +87,24 @@ class Lead extends Component {
         });
     }
 
+    handleChangeSelect = (event) => {
+        console.log('value: ', event.target.value)
+        console.log('name: ', event.target.name)
+
+        this.setState({
+            [event.target.name] : event.target.value
+        })
+    }
+
+    handleModal = () => {
+        const {open} = this.state
+        this.setState({
+            open: !open
+        })
+    }
+
     render() {
-        const {lead} = this.state
+        const {lead, open, tipo} = this.state
         if (this.state.loading) {
             return (
                 <Loading/>
@@ -103,10 +129,44 @@ class Lead extends Component {
                     <Grid item xs={4} sm={12}>
                         <Grid item xs={12} sm={12}>
                             <ListContatos contatos={lead.listaContatos}/>
-                            <Button variant={"contained"} color={"primary"}>Novo Contato </Button>
+                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>Novo Contato </Button>
                         </Grid>
                     </Grid>
 
+                    <Modal
+                    disableBackdropClick={false}	
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={open}
+                    onClose={this.handleModal}
+                    >
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            marginTop: "20%",
+                            height: "60vh"
+                        }}>
+                            <Card style={{width: "80%", height: "40%"}}>
+                                <InputLabel>Tipo</InputLabel>
+                                    <Select
+                                        value={tipo}
+                                        onChange={this.handleChangeSelect}
+                                        name="tipo"
+                                        input={
+                                            <Input/>
+                                        }
+                                        style={{marginTop: 18}}
+                                        fullWidth
+                                    >
+                                        <MenuItem value={0}>Não</MenuItem>
+                                        <MenuItem value={1}>Telefone</MenuItem>
+                                        <MenuItem value={2}>E-Mail</MenuItem>
+                                        <MenuItem value={3}>Whatsapp</MenuItem>
+                                        <MenuItem value={4}>Pessoalmente</MenuItem>
+                                    </Select>
+                            </Card>
+                        </div>    
+                    </Modal>
                 </Grid>
             </div>
         )
