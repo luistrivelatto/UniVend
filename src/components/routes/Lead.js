@@ -73,10 +73,9 @@ class Lead extends Component {
 
     onSubmit = () => {
         const {formaContato, observacoes, proximaAcao, tipoRecontato, dataRecontato, motivo, subMotivo} = this.state
-        console.log(Math.round(dataRecontato.getTime() / 1000))
 
         if (proximaAcao == 1) {
-            this.cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, dataRecontato)
+            this.cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, Date.parse(dataRecontato));
         } else if (proximaAcao == 3) {
             this.cadastrarContatoFinalizarLead(formaContato, observacoes, motivo, subMotivo)
         } else if (proximaAcao == 2) {
