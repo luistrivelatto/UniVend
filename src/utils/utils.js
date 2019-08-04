@@ -12,8 +12,9 @@ function stableSort(array, cmp) {
 // Retorna dia formatado
 function getFormattedDate(data) {
   let date = new Date(data);
-  return ("0" + date.getDate()).substr(-2) + "/" 
-    + ("0" + (date.getMonth() + 1)).substr(-2) + "/" + date.getFullYear();
+
+  return (date.getFullYear()) + "-" 
+    + ("0" + (date.getMonth() + 1)).substr(-2) + "-" + ("0" + date.getDate()).substr(-2);
 }
 
 function getHumanReadableDuration(milisseconds) {
