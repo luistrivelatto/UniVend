@@ -1,4 +1,5 @@
 import * as firebase from "firebase/app";
+import DataHandler from '../data/DataHandler';
 
 export default async function initialize() {
   firebase.initializeApp({
