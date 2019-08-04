@@ -39,7 +39,7 @@ class Home extends Component {
     }
 
     handleClickAtendimento = (id) => {
-        console.log(id)
+        this.props.history.push('lead/' + id)
     }
 
     render() {
