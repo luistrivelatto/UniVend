@@ -73,7 +73,6 @@ class DadosLead extends Component {
                     value={getFormattedDate(lead.infoPessoal.dataNascimento)}
                     InputLabelProps={{shrink: true, required: true}}
                     type="date"
-                    defaultValue={lead.infoPessoal.dataNascimento}
                 />
 
                 <TextField

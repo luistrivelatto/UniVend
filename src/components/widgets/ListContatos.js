@@ -34,7 +34,7 @@ class ListContatos extends Component {
                     </Grid>
                 </Grid>
                 {contatos.map((contato) => (
-                    <Grid container>
+                    <Grid container key={contato.timestamp}>
                         <Grid item xs={12} sm={3}>
                             <div>{EnumFormaContato.toString[contato.formaContato]}</div>
                         </Grid>
