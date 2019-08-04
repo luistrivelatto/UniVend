@@ -6,7 +6,8 @@ import { getHumanReadableDuration } from '../utils/utils';
 function Lead(
 	listaContatos,			// array de ContatoLead
 	infoPessoal,			// obj do tipo InfoPessoal
-	origemLead,				// EnumOrigemLead
+  origemLead,				// EnumOrigemLead
+  preScore,         // Random de 0.00 a 1.00
 	dataOrigemLead,			// timestamp
 	valoresMatriz,			// array de [dynamic] com os valores da matriz
 	nomeSdrResponsavel,		// String
@@ -16,7 +17,8 @@ function Lead(
 	return {
 		listaContatos: listaContatos || [],
 		infoPessoal,
-		origemLead,
+    origemLead,
+    preScore,
 		dataOrigemLead,
 		valoresMatriz: valoresMatriz || [],
 		nomeSdrResponsavel,
@@ -143,6 +145,11 @@ var EnumOrigemLead = {
   ]
 };
 
+var EnumPreScore = {
+  // value: Math.random().toFixed(2)
+  value: 0.4
+};
+
 var EnumFormaContato = {
 	telefone: 0,
 	email: 1,
@@ -157,6 +164,6 @@ var EnumFormaContato = {
 };
 
 export { Lead, InfoPessoal, ProximaAcao, ContatoLead,
-  EnumTipoConta, EnumTipoAcao, EnumOrigemLead, EnumFormaContato,
+  EnumTipoConta, EnumTipoAcao, EnumOrigemLead, EnumPreScore,EnumFormaContato,
   getDuracaoDesdeUltimoContato, getDuracaoTotal, isLeadPendente,
   isLeadEmAndamento, getDescricaoProximaAcaoOuStatus };
