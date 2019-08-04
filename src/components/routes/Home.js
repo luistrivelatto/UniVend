@@ -33,7 +33,7 @@ class Home extends Component {
     }
 
     handleClickPendente = (id) => {
-        // history.push('leads/' + id)
+        this.props.history.push('leads/' + id)
     }
 
     handleClickAtendimento = (id) => {

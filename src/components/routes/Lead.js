@@ -19,16 +19,16 @@ class Lead extends Component {
         this.state = {
             id: props.match.params.id,
             loading: true,
-            leads: [{}, {}]
+            lead: {}
         };
     }
 
     async componentDidMount() {
-        let leads = await DataHandler.getAllLeads();
-        console.log("AQUIIIIIIIIII", leads)
+        let lead = await DataHandler.getAllLeads().find((lead) => lead.id === this.state.id);
+        console.log("AQUIIIIIIIIII", lead)
         this.setState({
             loading: false,
-            leads
+            lead
         });
     }
 
