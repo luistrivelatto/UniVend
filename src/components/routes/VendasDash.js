@@ -154,8 +154,8 @@ class Home extends Component {
                     </div>
                 </Modal>
                 <Grid container>
-                    <Grid item xs={12} sm={6}>
-                        <Grid item xs={12} sm={12}>
+                    <Grid item xs={12} sm={12}>
+                        <Grid item xs={12} sm={7}>
                             <Paper style={{margin: 20, padding: 10}}>
                                 <div>
                                     <Typography style={{fontSize: 18}}>Pendentes</Typography>
@@ -174,12 +174,21 @@ class Home extends Component {
                                                 .filter((lead) => isLeadPendente(lead))
                                                 .map((lead) => (
                                                     <TableRow
-                                                        style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}}
                                                         key={lead.id} onClick={() => {
                                                         this.handleClickPendente(lead)
                                                     }}>
                                                         {console.log(lead.preScore)}
-
+                                                        <TableCell>
+                                                            <div style={
+                                                                {
+                                                                    background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F",
+                                                                    borderRadius: "60%",
+                                                                    color: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"
+                                                                }
+                                                            }>
+                                                                .
+                                                            </div>
+                                                        </TableCell>
                                                         <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
                                                         <TableCell>{lead.listaContatos.length}</TableCell>
                                                         <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>

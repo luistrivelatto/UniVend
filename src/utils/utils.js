@@ -13,7 +13,8 @@ function stableSort(array, cmp) {
 function getFormattedDate(data) {
     let date = new Date(data);
 
-    return (date.getFullYear()) + "-" + ("0" + (date.getMonth() + 1)).substr(-2) + "-" + ("0" + date.getDate()).substr(-2);
+    return (date.getFullYear()) + "-"
+        + ("0" + (date.getMonth() + 1)).substr(-2) + "-" + ("0" + date.getDate()).substr(-2);
 }
 
 function getHumanReadableDuration(milisseconds) {
@@ -35,4 +36,15 @@ function getHumanReadableDuration(milisseconds) {
     }
 }
 
-export {stableSort, getFormattedDate, getHumanReadableDuration};
+function timestampDentroDePeriodo(timestamp, comecoPeriodo, fimPeriodo) {
+    return timestamp > comecoPeriodo && timestamp < fimPeriodo;
+}
+
+function arrayAverage(array) {
+    if (array.length == 0) {
+        return null;
+    }
+    return array.reduce((p, c) => p + c, 0) / array.length;
+}
+
+export {stableSort, getFormattedDate, getHumanReadableDuration, timestampDentroDePeriodo, arrayAverage};

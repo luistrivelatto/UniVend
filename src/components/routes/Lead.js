@@ -159,6 +159,14 @@ class Lead extends Component {
                 <Grid container>
 
                     <Grid item xs={4} sm={12}>
+                        <Grid item xs={12} sm={12}>
+                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>
+                                Novo Contato
+                            </Button>
+                        </Grid>
+                    </Grid>
+
+                    <Grid item xs={4} sm={12}>
                         <Grid container>
                             <Grid item xs={4} sm={6}>
                                 <DadosLead lead={lead} editable={true}/>
@@ -173,15 +181,6 @@ class Lead extends Component {
                                     lead={lead}
                                 />
                             </Grid>
-                        </Grid>
-                    </Grid>
-
-                    <Grid item xs={4} sm={12}>
-                        <Grid item xs={12} sm={12}>
-                            <ListContatos contatos={lead.listaContatos}/>
-                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>
-                                Novo Contato
-                            </Button>
                         </Grid>
                     </Grid>
 
@@ -350,6 +349,12 @@ class Lead extends Component {
                             </Card>
                         </div>
                     </Modal>
+
+                    <Grid item xs={4} sm={12}>
+                        <Grid item xs={12} sm={12}>
+                            <ListContatos contatos={lead.listaContatos}/>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </div>
         )

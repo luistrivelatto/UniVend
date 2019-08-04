@@ -35,6 +35,17 @@ function getDuracaoDesdeUltimoContato(lead) {
   return new Date() - lead.listaContatos.slice(-1)[0].timestamp;
 }
 
+function leadEstaDentroDePeriodoDeTempo(lead, comecoPeriodo, fimPeriodo) {
+  let dataFimLead = lead.status.dataDeixouDeSerLead || new Date();
+  if(dataFimLead < comecoPeriodo) {
+    return false;
+  }
+  if(lead.dataOrigemLead > fimPeriodo) {
+    return false;
+  }
+  return true;
+}
+
 /// Retorna o tempo em ms
 function getDuracaoTotal(lead) {
   return new Date() - lead.dataOrigemLead;
@@ -166,4 +177,5 @@ var EnumFormaContato = {
 export { Lead, InfoPessoal, ProximaAcao, ContatoLead,
   EnumTipoConta, EnumTipoAcao, EnumOrigemLead, EnumPreScore,EnumFormaContato,
   getDuracaoDesdeUltimoContato, getDuracaoTotal, isLeadPendente,
-  isLeadEmAndamento, getDescricaoProximaAcaoOuStatus };
+  isLeadEmAndamento, getDescricaoProximaAcaoOuStatus,
+  leadEstaDentroDePeriodoDeTempo };
