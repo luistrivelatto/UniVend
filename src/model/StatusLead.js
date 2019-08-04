@@ -65,7 +65,15 @@ var EnumMotivoCongelado = {
 	concorrente: 0,
 	preco: 1,
 	semInteresse: 2,
-	naoConseguiuContato: 3
+	naoConseguiuContato: 3,
+  outro: 4,
+  toString: [
+    'Concorrente',
+    'Preço',
+    'Sem interesse',
+    'Não conseguiu contato',
+    'Outro'
+  ]
 };
 
 export { StatusLeadAtivo, StatusLeadCongelado, StatusLeadRepassadoParaVenda,
