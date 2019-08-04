@@ -13,9 +13,11 @@ import Modal from '@material-ui/core/Modal';
 import Card from '@material-ui/core/Card';
 import {Typography} from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
+import {getFormattedDate} from '../../utils/utils'
 
 
 
@@ -28,7 +30,13 @@ class Lead extends Component {
             loading: true,
             lead: {},
             open: false,
-            tipo: 0
+            tipo: 0,
+            observacoes: "",
+            action: 0,
+            reAction: 0,
+            data_react: new Date(),
+            motivoFim: -1,
+            subMotivoFim: ""
         };
     }
     
@@ -104,7 +112,7 @@ class Lead extends Component {
     }
 
     render() {
-        const {lead, open, tipo} = this.state
+        const {lead, open, tipo, observacoes, action, reAction, data_react, motivoFim, subMotivoFim} = this.state
         if (this.state.loading) {
             return (
                 <Loading/>
@@ -143,27 +151,142 @@ class Lead extends Component {
                         <div style={{
                             display: "flex",
                             justifyContent: "center",
-                            marginTop: "20%",
-                            height: "60vh"
+                            marginTop: "5%",
+                            
                         }}>
-                            <Card style={{width: "80%", height: "40%"}}>
-                                <InputLabel>Tipo</InputLabel>
-                                    <Select
-                                        value={tipo}
-                                        onChange={this.handleChangeSelect}
-                                        name="tipo"
-                                        input={
-                                            <Input/>
-                                        }
-                                        style={{marginTop: 18}}
+                            <Card style={{width: "80%", padding: 20}}>
+                                <Grid container>
+                                    <Grid item xs={12} sm={12}>
+                                        <Typography style={{
+                                            fontSize: 18,
+                                            fontWeight: "bold",
+                                            marginBottom: 20 
+                                        }}>
+                                            Cadastrar novo contato
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12}>
+                                        <InputLabel>Tipo</InputLabel>
+                                            <Select
+                                                value={tipo}
+                                                onChange={this.handleChangeSelect}
+                                                name="tipo"
+                                                input={
+                                                    <Input/>
+                                                }
+                                                style={{marginTop: 18}}
+                                                fullWidth
+                                            >
+                                                <MenuItem value={0}>Não</MenuItem>
+                                                <MenuItem value={1}>Telefone</MenuItem>
+                                                <MenuItem value={2}>E-Mail</MenuItem>
+                                                <MenuItem value={3}>Whatsapp</MenuItem>
+                                                <MenuItem value={4}>Pessoalmente</MenuItem>
+                                            </Select>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12}>
+                                    <TextField
+                                        onChange={this.handleChangeInput}
+                                        name={'observacoes'}
+                                        label="Observações"
+                                        value={observacoes}
+                                        style={{paddingLeft: 8}}
+                                        margin="normal"
                                         fullWidth
-                                    >
-                                        <MenuItem value={0}>Não</MenuItem>
-                                        <MenuItem value={1}>Telefone</MenuItem>
-                                        <MenuItem value={2}>E-Mail</MenuItem>
-                                        <MenuItem value={3}>Whatsapp</MenuItem>
-                                        <MenuItem value={4}>Pessoalmente</MenuItem>
-                                    </Select>
+                                    />
+                                    </Grid>
+                                    <Grid item xs={12} sm={12}>
+                                        <InputLabel>Próxima Ação</InputLabel>
+                                            <Select
+                                                value={action}
+                                                onChange={this.handleChangeSelect}
+                                                name="action"
+                                                input={
+                                                    <Input/>
+                                                }
+                                                style={{marginTop: 18}}
+                                                fullWidth
+                                            >
+                                                <MenuItem value={0}>Nenhuma ação</MenuItem>
+                                                <MenuItem value={1}>Agendar Recontato</MenuItem>
+                                                <MenuItem value={2}>Repassar para Venda</MenuItem>
+                                                <MenuItem value={3}>Finalizar Lead</MenuItem>
+                                                
+                                            </Select>
+                                            {
+                                                action==1 ? 
+                                                <Grid item xs={12} sm={12}>
+                                                    <Grid item xs={12} sm={12}>
+                                                        <InputLabel>Forma de Recontato</InputLabel>
+                                                        <Select
+                                                            value={reAction}
+                                                            onChange={this.handleChangeSelect}
+                                                            name="reAction"
+                                                            input={
+                                                                <Input/>
+                                                            }
+                                                            style={{marginTop: 18}}
+                                                            fullWidth
+                                                        >
+                                                            <MenuItem value={0}>Telefone</MenuItem>
+                                                            <MenuItem value={1}>Whatsapp</MenuItem>
+                                                            <MenuItem value={2}>E-mail</MenuItem>                                                        
+                                                        </Select>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12}>
+                                                    <TextField
+                                                        onChange={this.handleChangeSelect}
+                                                        name={'data_react'}
+                                                        label="Data de Recontato"
+                                                        value={getFormattedDate(data_react)}
+                                                        type="date"
+                                                        style={{paddingLeft: 8}}
+                                                        margin="normal"
+                                                        fullWidth
+                                                    />  
+                                                    </Grid>
+                                                </Grid>
+                                                    
+                                                : null}
+                                                {
+                                                action==3 ? 
+                                                <Grid item xs={12} sm={12}>
+                                                    <Grid item xs={12} sm={12}>
+                                                        <InputLabel>Motivo da Finalização do Lead</InputLabel>
+                                                        <Select
+                                                            value={motivoFim}
+                                                            onChange={this.handleChangeSelect}
+                                                            name="motivoFim"
+                                                            input={
+                                                                <Input/>
+                                                            }
+                                                            style={{marginTop: 18}}
+                                                            fullWidth
+                                                        >
+                                                            
+                                                            <MenuItem value={0}>Fechou com concorrente</MenuItem>
+                                                            <MenuItem value={1}>Preço</MenuItem>
+                                                            <MenuItem value={2}>Não tem interesse</MenuItem>
+                                                            <MenuItem value={3}>Telefone Incorreto</MenuItem>
+                                                            <MenuItem value={4}>Não Conseguiu Contato</MenuItem>
+                                                            <MenuItem value={5}>Outro</MenuItem>                                                        
+                                                        </Select>
+                                                    </Grid>
+                                                    <Grid item xs={12} sm={12}>
+                                                    <TextField
+                                                        onChange={this.handleChangeInput}
+                                                        name={'subMotivoFim'}
+                                                        label="Descrição do Motivo"
+                                                        style={{paddingLeft: 8}}
+                                                        margin="normal"
+                                                        fullWidth
+                                                    />  
+                                                    </Grid>
+                                                </Grid>
+                                                : null}
+                                                
+                                    </Grid>
+                                </Grid>
                             </Card>
                         </div>    
                     </Modal>
