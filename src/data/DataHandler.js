@@ -60,7 +60,7 @@ class DataHandler {
           .database()
           .ref(pathLeads)
           .child(lead.id)
-          .update(lead);
+          .set(lead);
     }
     
     static populateDatabase() {

@@ -5,35 +5,32 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Input from '@material-ui/core/Input';
+import { keyFormViaja, keyFormProfissao,
+  EnumRespostaViagem, EnumRespostaProfissao } from '../../model/LeadScorePessoaFisica';
 
 class FormFisico extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            viaja: '',
-            profissao: ''
-        };
-    }
-
-    handleChangeInput = event => {
-        console.log('name: ', [event.currentTarget.name], 'value', event.currentTarget.value)
-        this.setState({
-            [event.currentTarget.name]: event.currentTarget.value
-        })
     }
 
     handleChangeSelect = (event) => {
-        console.log('name: ', event.target.name)
-        console.log('valor: ', event.target.value)
-
         this.setState({
-            [event.target.name]: event.target.value
-        })
+          /* o estado sendo atualizado é o próprio objeto Lead que está nos props */
+        });
+        
+        this.props.onValueChanged(event.target.name, event.target.value);
+    }
+    
+    valueOrEmpty = function(value) {
+      return value == undefined ? '' : value;
     }
 
     render() {
         const {lead} = this.props;
-        const {viaja, profissao} = this.state
+        
+        if(lead == null) {
+          return <div></div>;
+        }
 
         return (
             <Paper style={{margin: 5, padding: 15}}>
@@ -42,40 +39,46 @@ class FormFisico extends Component {
                 <div style={{marginTop: 15}}>
                     <InputLabel>Viaja?</InputLabel>
                     <Select
-                        value={viaja}
+                        value={this.valueOrEmpty(lead.valoresMatriz[keyFormViaja])}
                         onChange={this.handleChangeSelect}
-                        name="viaja"
+                        name={keyFormViaja}
                         input={
                             <Input/>
                         }
                         style={{marginTop: 18}}
                         fullWidth
                     >
-                        <MenuItem value={0}>Não informado</MenuItem>
-                        <MenuItem value={4}>Não</MenuItem>
-                        <MenuItem value={1}>Sim, no Estado</MenuItem>
-                        <MenuItem value={2}>Sim, no País</MenuItem>
-                        <MenuItem value={3}>Sim, para o Exterior</MenuItem>
+                      {
+                        [...Array(EnumRespostaViagem.length).keys()]
+                        .map((id) =>
+                          (
+                            <MenuItem value={id} key={id}>{EnumRespostaViagem.toString[id]}</MenuItem>
+                          )
+                        )
+                      }
                     </Select>
                 </div>
 
                 <div style={{marginTop: 15}}>
                     <InputLabel>Profissão</InputLabel>
                     <Select
-                        value={profissao}
+                        value={this.valueOrEmpty(lead.valoresMatriz[keyFormProfissao])}
                         onChange={this.handleChangeSelect}
-                        name="profissao"
+                        name={keyFormProfissao}
                         input={
                             <Input/>
                         }
                         style={{marginTop: 18}}
                         fullWidth
                     >
-                        <MenuItem value={0}>Não informada</MenuItem>
-                        <MenuItem value={1}>Engenheiro</MenuItem>
-                        <MenuItem value={2}>Advogado</MenuItem>
-                        <MenuItem value={3}>Médico</MenuItem>
-                        <MenuItem value={4}>Outro</MenuItem>
+                      {
+                        [...Array(EnumRespostaProfissao.length).keys()]
+                        .map((id) =>
+                          (
+                            <MenuItem value={id} key={id}>{EnumRespostaProfissao.toString[id]}</MenuItem>
+                          )
+                        )
+                      }
                     </Select>
                 </div>
             </Paper>
