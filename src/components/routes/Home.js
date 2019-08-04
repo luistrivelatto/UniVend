@@ -103,7 +103,7 @@ class Home extends Component {
                                         {leads
                                           .filter((lead) => isLeadEmAndamento(lead))
                                           .map((lead) => (
-                                            <TableRow key={lead.id} onClick={() => {
+                                            <TableRow style={{color: "#fafe12"}} key={lead.id} onClick={() => {
                                                 this.handleClickAtendimento(lead.id)
                                             }}>
                                                 <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
