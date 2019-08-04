@@ -89,8 +89,6 @@ class Home extends Component {
                                                 <TableRow style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}} key={lead.id} onClick={() => {
                                                     this.handleClickPendente(lead.id)
                                                 }}>
-                                                    {console.log(lead.preScore)}
-                                                    
                                                     <TableCell >{lead.infoPessoal.nomeConta}</TableCell>
                                                     <TableCell>{lead.listaContatos.length}</TableCell>
                                                     <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
