@@ -1,65 +1,78 @@
 import * as firebase from "firebase/app";
 import "firebase/database";
-import { Lead, InfoPessoal, ProximaAcao, ContatoLead,
-  EnumTipoConta, EnumTipoAcao, EnumOrigemLead, EnumFormaContato } from "../model/Lead";
-import { StatusLeadAtivo } from "../model/StatusLead";
+import {
+    Lead, InfoPessoal, ProximaAcao, ContatoLead,
+    EnumTipoConta, EnumTipoAcao, EnumOrigemLead, EnumFormaContato
+} from "../model/Lead";
+import {StatusLeadAtivo} from "../model/StatusLead";
 
 const pathLeads = 'Leads';
 
 class DataHandler {
-    static async getAllItems(path) {
+    static async getAllLeads() {
         let data = (await firebase
             .database()
-            .ref(path)
+            .ref(pathLeads)
             .once('value'))
             .val();
-        
-        if(data === null) {
+
+        if (data === null) {
             return [];
         }
-        
-        for(var id in data) {
-          data[id].id = id;
+
+        let ret = [];
+
+        for (var id in data) {
+            // Não é bonito mas é pra amanhã
+            data[id].id = id;
+            if (data[id].listaContatos == null) {
+                data[id].listaContatos = [];
+            }
+            if (data[id].valoresMatriz == null) {
+                data[id].valoresMatriz = [];
+            }
+            ret.push(data[id]);
         }
-        
-        return Object.keys(data).map((id) => data[id]);
+
+        return ret;
     }
 
-    static async getAllLeads() {
-      return await this.getAllItems(pathLeads);
+    static async getLeadsFromSdr(nomeSdrResponsavel) {
+        let leads = await this.getAllLeads();
+        return leads.filter((lead) => lead.nomeSdrResponsavel === nomeSdrResponsavel);
     }
-    
+
     static populateDatabase() {
-      
-      let leads = [
-        Lead(
-          [],
-          InfoPessoal(
-            EnumTipoConta.pessoaFisica,
-            'José de Souza',
-            '013.619.277-61',
-            'josedesouza@gmail.com',
-            '99133-5060',
-            new Date('08-04-1982'),
-            'Cascavel',
-            'Brasileiro',
-          ),
-          EnumOrigemLead.marketing,
-          new Date(),
-          [],
-          'Murillo Douglas',
-          null,
-          StatusLeadAtivo()
-        )
-      ];
-      
-      for(var lead of leads) {      
-        firebase
-          .database()
-          .ref(pathLeads)
-          .push()
-          .set(lead);
-      }
+
+        let leads = [
+            Lead(
+                [],
+                InfoPessoal(
+                    EnumTipoConta.pessoaFisica,
+                    'José de Souza',
+                    '013.619.277-61',
+                    'josedesouza@gmail.com',
+                    '99133-5060',
+                    new Date('08-04-1982'),
+                    'Cascavel',
+                    'Brasileiro',
+                ),
+                EnumOrigemLead.marketing,
+                new Date(),
+                [],
+                'Murillo Douglas',
+                null,
+                StatusLeadAtivo()
+            )
+        ];
+
+        for (var lead of leads) {
+            firebase
+                .database()
+                .ref(pathLeads)
+                .push()
+                .set(lead);
+        }
     }
 }
 

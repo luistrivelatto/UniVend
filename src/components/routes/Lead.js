@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import Loading from '../widgets/Loading';
 import DataHandler from '../../data/DataHandler';
 import Paper from '@material-ui/core/Paper';
-import {Route} from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Grid from '@material-ui/core/Grid';
@@ -13,11 +12,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 
-class Home extends Component {
+class Lead extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            id: props.match.params.id,
             loading: true,
             leads: [{}, {}]
         };
@@ -33,7 +33,7 @@ class Home extends Component {
     }
 
     handleClickPendente = (id) => {
-        // history.push('leads/' + id)
+        console.log(id)
     }
 
     handleClickAtendimento = (id) => {
@@ -122,4 +122,4 @@ class Home extends Component {
     }
 }
 
-export default Home;
+export default Lead;
