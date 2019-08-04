@@ -68,7 +68,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
-                    name="Born date"
+                    name="BornDate"
                     label="Data de Nascimento"
                     value={getFormattedDate(lead.infoPessoal.dataNascimento)}
                     InputLabelProps={{shrink: true, required: true}}

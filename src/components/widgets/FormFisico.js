@@ -23,9 +23,11 @@ class FormFisico extends Component {
     }
 
     handleChangeSelect = (event) => {
-        console.log('name: ', event.target.value)
+        console.log('name: ', event.target.name)
+        console.log('valor: ', event.target.value)
+
         this.setState({
-            status: event.target.value
+            [event.target.name]: event.target.value
         })
     }
 
@@ -49,11 +51,11 @@ class FormFisico extends Component {
                         style={{marginTop: 18}}
                         fullWidth
                     >
-                        <MenuItem value={0}>Não</MenuItem>
+                        <MenuItem value={0}>Não informado</MenuItem>
+                        <MenuItem value={4}>Não</MenuItem>
                         <MenuItem value={1}>Sim, no Estado</MenuItem>
                         <MenuItem value={2}>Sim, no País</MenuItem>
                         <MenuItem value={3}>Sim, para o Exterior</MenuItem>
-                        <MenuItem value={4}>Não informado</MenuItem>
                     </Select>
                 </div>
 
@@ -62,7 +64,7 @@ class FormFisico extends Component {
                     <Select
                         value={profissao}
                         onChange={this.handleChangeSelect}
-                        name="Profissao"
+                        name="profissao"
                         input={
                             <Input/>
                         }
