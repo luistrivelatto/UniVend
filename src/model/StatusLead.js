@@ -8,7 +8,7 @@ function StatusLeadAtivo(
 function StatusLeadCongelado(
 	motivo,					// EnumMotivoCongelado
 	submotivo,				// String
-	dataDeixouDeSerLead		// obj do tipo Date
+	dataDeixouDeSerLead		// timestamp
 ) {
 	return {
 		tipo: EnumTipoStatusLead.congelado,
@@ -19,7 +19,7 @@ function StatusLeadCongelado(
 }
 
 function StatusLeadRepassadoParaVenda(
-	dataDeixouDeSerLead		// obj do tipo Date
+	dataDeixouDeSerLead		// timestamp
 ) {
 	return {
 		tipo: EnumTipoStatusLead.repassadoParaVenda,
@@ -28,8 +28,8 @@ function StatusLeadRepassadoParaVenda(
 }
 
 function StatusLeadVendaFechada (
-	dataDeixouDeSerLead,		// obj do tipo Date
-	dataFechouVenda				// obj do tipo Date
+	dataDeixouDeSerLead,		// timestamp
+	dataFechouVenda				// timestamp
 ) {
 	return {
 		tipo: EnumTipoStatusLead.vendaFechada,
@@ -41,8 +41,8 @@ function StatusLeadVendaFechada (
 function StatusLeadCongeladoAposRepasseVenda(
 	motivo,					// EnumMotivoCongelado
 	submotivo,				// String
-	dataDeixouDeSerLead,	// obj do tipo Date
-	dataCongelouVenda		// obj do tipo Date
+	dataDeixouDeSerLead,	// timestamp
+	dataCongelouVenda		// timestamp
 ) {
 	return {
 		tipo: EnumTipoStatusLead.congeladoAposRepasseVenda,

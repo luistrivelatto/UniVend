@@ -11,4 +11,6 @@ export default async function initialize() {
       messagingSenderId: "218906903133",
       appId: "1:218906903133:web:be0c3305b0ab9d86"
   });
+  
+  //DataHandler.populateDatabase();
 }
