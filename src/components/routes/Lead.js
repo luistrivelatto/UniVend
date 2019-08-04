@@ -20,7 +20,6 @@ import Input from '@material-ui/core/Input';
 import {getFormattedDate} from '../../utils/utils'
 
 
-
 class Lead extends Component {
 
     constructor(props) {
@@ -30,16 +29,16 @@ class Lead extends Component {
             loading: true,
             lead: {},
             open: false,
-            tipo: 0,
+            formaContato: 0,
             observacoes: "",
-            action: 0,
-            reAction: 0,
-            data_react: new Date(),
-            motivoFim: -1,
-            subMotivoFim: ""
+            proximaAcao: 0,
+            tipoRecontato: 0,
+            dataRecontato: new Date(),
+            motivo: -1,
+            subMotivo: ""
         };
     }
-    
+
     async componentDidMount() {
         let lead = (await DataHandler.getLeadFromId(this.state.id));
         this.setState({
@@ -57,6 +56,35 @@ class Lead extends Component {
             new Date().getTime(),
             observacoes
         ));
+    }
+
+    resetStates = () => {
+        this.setState({
+            open: false,
+            formaContato: 0,
+            observacoes: "",
+            proximaAcao: 0,
+            tipoRecontato: 0,
+            dataRecontato: new Date(),
+            motivo: -1,
+            subMotivo: ""
+        })
+    }
+
+    onSubmit = () => {
+        const {formaContato, observacoes, proximaAcao, tipoRecontato, dataRecontato, motivo, subMotivo} = this.state
+
+        if (proximaAcao == 1) {
+            this.cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, dataRecontato)
+        } else if (proximaAcao == 3) {
+            this.cadastrarContatoFinalizarLead(formaContato, observacoes, motivo, subMotivo)
+        } else if (proximaAcao == 2) {
+            this.cadastrarContatoRepassarParaVenda(formaContato, observacoes)
+        } else {
+            alert('Você precisa tomar um ação')
+        }
+
+
     }
 
     async cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, dataRecontato) {
@@ -100,7 +128,7 @@ class Lead extends Component {
         console.log('name: ', event.target.name)
 
         this.setState({
-            [event.target.name] : event.target.value
+            [event.target.name]: event.target.value
         })
     }
 
@@ -112,7 +140,7 @@ class Lead extends Component {
     }
 
     render() {
-        const {lead, open, tipo, observacoes, action, reAction, data_react, motivoFim, subMotivoFim} = this.state
+        const {lead, open, formaContato, observacoes, proximaAcao, tipoRecontato, dataRecontato, motivo, subMotivo} = this.state
         if (this.state.loading) {
             return (
                 <Loading/>
@@ -137,22 +165,23 @@ class Lead extends Component {
                     <Grid item xs={4} sm={12}>
                         <Grid item xs={12} sm={12}>
                             <ListContatos contatos={lead.listaContatos}/>
-                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>Novo Contato </Button>
+                            <Button variant={"contained"} color={"primary"} onClick={this.handleModal}>Novo
+                                Contato </Button>
                         </Grid>
                     </Grid>
 
                     <Modal
-                    disableBackdropClick={false}	
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={open}
-                    onClose={this.handleModal}
+                        disableBackdropClick={false}
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        open={open}
+                        onClose={this.handleModal}
                     >
                         <div style={{
                             display: "flex",
                             justifyContent: "center",
                             marginTop: "5%",
-                            
+
                         }}>
                             <Card style={{width: "80%", padding: 20}}>
                                 <Grid container>
@@ -160,68 +189,70 @@ class Lead extends Component {
                                         <Typography style={{
                                             fontSize: 18,
                                             fontWeight: "bold",
-                                            marginBottom: 20 
+                                            marginBottom: 20
                                         }}>
                                             Cadastrar novo contato
                                         </Typography>
                                     </Grid>
+
                                     <Grid item xs={12} sm={12}>
-                                        <InputLabel>Tipo</InputLabel>
-                                            <Select
-                                                value={tipo}
-                                                onChange={this.handleChangeSelect}
-                                                name="tipo"
-                                                input={
-                                                    <Input/>
-                                                }
-                                                style={{marginTop: 18}}
-                                                fullWidth
-                                            >
-                                                <MenuItem value={0}>Não</MenuItem>
-                                                <MenuItem value={1}>Telefone</MenuItem>
-                                                <MenuItem value={2}>E-Mail</MenuItem>
-                                                <MenuItem value={3}>Whatsapp</MenuItem>
-                                                <MenuItem value={4}>Pessoalmente</MenuItem>
-                                            </Select>
+                                        <InputLabel>Forma de Contato</InputLabel>
+                                        <Select
+                                            value={formaContato}
+                                            onChange={this.handleChangeSelect}
+                                            name="formaContato"
+                                            input={
+                                                <Input/>
+                                            }
+                                            style={{marginTop: 18}}
+                                            fullWidth
+                                        >
+                                            <MenuItem value={0}>Não</MenuItem>
+                                            <MenuItem value={1}>Telefone</MenuItem>
+                                            <MenuItem value={2}>E-Mail</MenuItem>
+                                            <MenuItem value={3}>Whatsapp</MenuItem>
+                                            <MenuItem value={4}>Pessoalmente</MenuItem>
+                                        </Select>
                                     </Grid>
                                     <Grid item xs={12} sm={12}>
-                                    <TextField
-                                        onChange={this.handleChangeInput}
-                                        name={'observacoes'}
-                                        label="Observações"
-                                        value={observacoes}
-                                        style={{paddingLeft: 8}}
-                                        margin="normal"
-                                        fullWidth
-                                    />
+                                        <TextField
+                                            onChange={this.handleChangeInput}
+                                            name={'observacoes'}
+                                            label="Observações"
+                                            value={observacoes}
+                                            style={{paddingLeft: 8}}
+                                            margin="normal"
+                                            fullWidth
+                                        />
                                     </Grid>
+
                                     <Grid item xs={12} sm={12}>
                                         <InputLabel>Próxima Ação</InputLabel>
-                                            <Select
-                                                value={action}
-                                                onChange={this.handleChangeSelect}
-                                                name="action"
-                                                input={
-                                                    <Input/>
-                                                }
-                                                style={{marginTop: 18}}
-                                                fullWidth
-                                            >
-                                                <MenuItem value={0}>Nenhuma ação</MenuItem>
-                                                <MenuItem value={1}>Agendar Recontato</MenuItem>
-                                                <MenuItem value={2}>Repassar para Venda</MenuItem>
-                                                <MenuItem value={3}>Finalizar Lead</MenuItem>
-                                                
-                                            </Select>
-                                            {
-                                                action==1 ? 
+                                        <Select
+                                            value={proximaAcao}
+                                            onChange={this.handleChangeSelect}
+                                            name="proximaAcao"
+                                            input={
+                                                <Input/>
+                                            }
+                                            style={{marginTop: 18}}
+                                            fullWidth
+                                        >
+                                            <MenuItem value={0}>Nenhuma ação</MenuItem>
+                                            <MenuItem value={1}>Agendar Recontato</MenuItem>
+                                            <MenuItem value={2}>Repassar para Venda</MenuItem>
+                                            <MenuItem value={3}>Finalizar Lead</MenuItem>
+
+                                        </Select>
+                                        {
+                                            proximaAcao == 1 ?
                                                 <Grid item xs={12} sm={12}>
                                                     <Grid item xs={12} sm={12}>
                                                         <InputLabel>Forma de Recontato</InputLabel>
                                                         <Select
-                                                            value={reAction}
+                                                            value={tipoRecontato}
                                                             onChange={this.handleChangeSelect}
-                                                            name="reAction"
+                                                            name="tipoRecontato"
                                                             input={
                                                                 <Input/>
                                                             }
@@ -230,65 +261,77 @@ class Lead extends Component {
                                                         >
                                                             <MenuItem value={0}>Telefone</MenuItem>
                                                             <MenuItem value={1}>Whatsapp</MenuItem>
-                                                            <MenuItem value={2}>E-mail</MenuItem>                                                        
+                                                            <MenuItem value={2}>E-mail</MenuItem>
                                                         </Select>
                                                     </Grid>
                                                     <Grid item xs={12} sm={12}>
-                                                    <TextField
-                                                        onChange={this.handleChangeSelect}
-                                                        name={'data_react'}
-                                                        label="Data de Recontato"
-                                                        value={getFormattedDate(data_react)}
-                                                        type="date"
-                                                        style={{paddingLeft: 8}}
-                                                        margin="normal"
-                                                        fullWidth
-                                                    />  
+                                                        <TextField
+                                                            onChange={this.handleChangeSelect}
+                                                            name={'dataRecontato'}
+                                                            label="Data de Recontato"
+                                                            value={getFormattedDate(dataRecontato)}
+                                                            type="date"
+                                                            style={{paddingLeft: 8}}
+                                                            margin="normal"
+                                                            fullWidth
+                                                        />
                                                     </Grid>
                                                 </Grid>
-                                                    
+
                                                 : null}
-                                                {
-                                                action==3 ? 
+                                        {
+                                            proximaAcao == 3 ?
                                                 <Grid item xs={12} sm={12}>
                                                     <Grid item xs={12} sm={12}>
                                                         <InputLabel>Motivo da Finalização do Lead</InputLabel>
                                                         <Select
-                                                            value={motivoFim}
+                                                            value={motivo}
                                                             onChange={this.handleChangeSelect}
-                                                            name="motivoFim"
+                                                            name="motivo"
                                                             input={
                                                                 <Input/>
                                                             }
                                                             style={{marginTop: 18}}
                                                             fullWidth
                                                         >
-                                                            
+
                                                             <MenuItem value={0}>Fechou com concorrente</MenuItem>
                                                             <MenuItem value={1}>Preço</MenuItem>
                                                             <MenuItem value={2}>Não tem interesse</MenuItem>
                                                             <MenuItem value={3}>Telefone Incorreto</MenuItem>
                                                             <MenuItem value={4}>Não Conseguiu Contato</MenuItem>
-                                                            <MenuItem value={5}>Outro</MenuItem>                                                        
+                                                            <MenuItem value={5}>Outro</MenuItem>
                                                         </Select>
                                                     </Grid>
                                                     <Grid item xs={12} sm={12}>
-                                                    <TextField
-                                                        onChange={this.handleChangeInput}
-                                                        name={'subMotivoFim'}
-                                                        label="Descrição do Motivo"
-                                                        style={{paddingLeft: 8}}
-                                                        margin="normal"
-                                                        fullWidth
-                                                    />  
+                                                        <TextField
+                                                            onChange={this.handleChangeInput}
+                                                            name={'subMotivo'}
+                                                            label="Descrição do Motivo"
+                                                            style={{paddingLeft: 8}}
+                                                            margin="normal"
+                                                            fullWidth
+                                                        />
                                                     </Grid>
                                                 </Grid>
                                                 : null}
-                                                
+
+                                    </Grid>
+                                    <Grid item xs={12} sm={12}>
+                                        <div style={{marginTop: 10}}/>
+                                    </Grid>
+                                    <Grid item xs={12} sm={8}/>
+                                    <Grid item xs={12} sm={2}>
+                                        <Button variant={"contained"} color={"secondary"}
+                                                onClick={this.resetStates}> Cancelar</Button>
+                                    </Grid>
+                                    <Grid item xs={12} sm={2}>
+                                        <Button variant={"contained"} color={"primary"}
+                                                onClick={this.onSubmit}> Ok</Button>
                                     </Grid>
                                 </Grid>
                             </Card>
-                        </div>    
+                        </div>
                     </Modal>
                 </Grid>
             </div>
