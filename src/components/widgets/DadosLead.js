@@ -71,7 +71,7 @@ class DadosLead extends Component {
                     name="Born date"
                     label="Born date"
                     value={getFormattedDate(lead.infoPessoal.dataNascimento)}
-                    InputLabelProps={{ shrink: true, required: true }}
+                    InputLabelProps={{shrink: true, required: true}}
                     type="date"
                     defaultValue={lead.infoPessoal.dataNascimento}
                 />
