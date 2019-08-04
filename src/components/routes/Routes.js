@@ -4,6 +4,7 @@ import NotFound from './NotFound';
 import Home from './Home';
 import Lead from './Lead';
 import Dashboard from './Dashboard';
+import VendasDash from './VendasDash';
 
 const Routes = () => {
     return (
@@ -11,6 +12,7 @@ const Routes = () => {
             <Route exact path="/" component={Home}/>
             <Route path="/lead/:id" component={Lead}/>
             <Route path="/dashboard" component={Dashboard}/>
+            <Route path="/vendas" component={VendasDash}/>
             <Route path="*" component={NotFound}/>
         </Switch>
     );
