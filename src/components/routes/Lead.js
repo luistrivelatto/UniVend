@@ -76,7 +76,7 @@ class Lead extends Component {
         console.log(Math.round(dataRecontato.getTime() / 1000))
 
         if (proximaAcao == 1) {
-            this.cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, Math.round(dataRecontato.getTime() / 1000))
+            this.cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, dataRecontato)
         } else if (proximaAcao == 3) {
             this.cadastrarContatoFinalizarLead(formaContato, observacoes, motivo, subMotivo)
         } else if (proximaAcao == 2) {
@@ -285,7 +285,7 @@ class Lead extends Component {
                                                             onChange={this.handleChangeSelect}
                                                             name={'dataRecontato'}
                                                             label="Data de Recontato"
-                                                            value={getFormattedDate(dataRecontato)}
+                                                            value={dataRecontato}
                                                             type="datetime-local"
                                                             style={{paddingLeft: 8}}
                                                             margin="normal"
