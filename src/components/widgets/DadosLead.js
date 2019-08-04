@@ -3,7 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import {Typography} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 import {getFormattedDate} from '../../utils/utils'
-import { EnumOrigemLead } from '../../model/Lead';
+import {EnumOrigemLead} from '../../model/Lead';
 
 class DadosLead extends Component {
     constructor(props) {
@@ -13,12 +13,13 @@ class DadosLead extends Component {
 
 
     render() {
-        const {lead} = this.props;
+        const {lead, editable} = this.props;
 
         return (
             <Paper style={{margin: 5, padding: 15}}>
                 <Typography style={{fontSize: 18, fontWeight: 'bold'}}>Dados do Lead: </Typography>
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'nome'}
                     label="Nome"
@@ -29,6 +30,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'nome'}
                     label="Telefone"
@@ -39,6 +41,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'nome'}
                     label="Email"
@@ -49,6 +52,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'nome'}
                     label="CPF/CNPJ"
@@ -59,6 +63,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'cidade'}
                     label="Cidade"
@@ -69,6 +74,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'Data de Nascimento'}
                     label="Data de Nascimento"
@@ -79,6 +85,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'nacionalidade'}
                     label="Nacionalidade"
@@ -89,6 +96,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'origem'}
                     label="Origem do Lead"
@@ -99,6 +107,7 @@ class DadosLead extends Component {
                 />
 
                 <TextField
+                    editable={editable}
                     onChange={this.handleChangeInput}
                     name={'sdr'}
                     label="SDR atual"

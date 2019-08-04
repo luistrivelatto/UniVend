@@ -1,41 +1,42 @@
 import React, {Component} from 'react'
 import Loading from '../widgets/Loading';
+import ConfirmaVenda from '../widgets/ConfirmaVenda';
 import DataHandler from '../../data/DataHandler';
 import Paper from '@material-ui/core/Paper';
-import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import Chart from 'react-google-charts';
+import DadosLead from '../widgets/DadosLead'
+
 import {
     getDuracaoDesdeUltimoContato, getDuracaoTotal, isLeadPendente,
     isLeadEmAndamento, getDescricaoProximaAcaoOuStatus
 } from "../../model/Lead";
 import {getHumanReadableDuration} from '../../utils/utils';
 
-class Dashboard extends Component {
+class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             loading: true,
-            leads: null,
-            dados: [
-                ['x', 'dogs', 'cats'],
-                [0, 0, 0],
-                [1, 10, 5],
-                [2, 20, 15],
-                [3, 17, 9],
-                [4, 18, 10],
-                [5, 9, 5],
-                [6, 11, 3],
-                [7, 27, 19],
-            ]
+            leads: []
         };
+    }
+
+    colors = (color) => {
+        if (color == "green") {
+            return "#38E896"
+        } else if (color == "yellow") {
+            return "#EAEB5F"
+        } else {
+            return "#FF2922"
+        }
     }
 
     async componentDidMount() {
@@ -44,154 +45,86 @@ class Dashboard extends Component {
             loading: false,
             leads
         });
-
-        setInterval(() => {
-            this.setState({
-                dados: [
-                    ['x', 'dogs', 'cats'],
-                    [0, 0, 0],
-                    [1, 20, 5],
-                    [2, 30, 15],
-                    [3, 17, 9],
-                    [4, 18, 10],
-                    [5, 9, 5],
-                    [6, 11, 3],
-                    [7, 27, 19],
-                ]
-            });
-        }, 2000);
+        // DataHandler.populateDatabase()
     }
 
+    handleClickPendente = (lead) => {
+        this.setState({lead: lead})
+    }
+
+
     render() {
-        const {leads} = this.state
+        const {leads, lead} = this.state
+        let showLead
+        if (typeof lead !== 'undefined') {
+            showLead = true
+        } else {
+            showLead = false
+
+        }
+
         if (this.state.loading) {
             return (
                 <Loading/>
             );
         }
+
         return (
-            <Paper style={{margin: 20, padding: 15}}>
+            <div id='app'>
                 <Grid container>
-                    <Grid item xs={12} sm={12}>
-                        <Typography style={{fontSize: 18, fontWeight: 'bold'}}> Dashboard Gerencial</Typography>
+                    <Grid item xs={12} sm={6}>
+
+                        <Grid item xs={12} sm={12}>
+                            {showLead && <ConfirmaVenda/>}
+                        </Grid>
+
+                        <Grid item xs={12} sm={12}>
+                            <Paper style={{margin: 20, padding: 10}}>
+                                <div>
+                                    <Typography style={{fontSize: 18}}>Pendentes</Typography>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Nome</TableCell>
+                                                <TableCell align="right">Nº Contatos</TableCell>
+                                                <TableCell align="right">Último Contato</TableCell>
+                                                <TableCell align="right">Tempo Total</TableCell>
+                                                <TableCell align="right">Próxima Ação</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {leads
+                                                .filter((lead) => isLeadPendente(lead))
+                                                .map((lead) => (
+                                                    <TableRow
+                                                        style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}}
+                                                        key={lead.id} onClick={() => {
+                                                        this.handleClickPendente(lead)
+                                                    }}>
+                                                        {console.log(lead.preScore)}
+
+                                                        <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
+                                                        <TableCell>{lead.listaContatos.length}</TableCell>
+                                                        <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
+                                                        <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
+                                                        <TableCell>{getDescricaoProximaAcaoOuStatus(lead)}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </Paper>
+                        </Grid>
                     </Grid>
 
-                    <Grid item xs={12} sm={4}>
-                        <Card style={{margin: 10, padding: 10}}>
-                            <div>card 1</div>
-                            <div>card 1</div>
-                            <div>card 1</div>
-                            <div>card 1</div>
-                            <div>card 1</div>
-                            <div>card 1</div>
-                            <div>card 1</div>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <Card style={{margin: 10, padding: 10}}>
-                            <div>card 2</div>
-                            <div>card 2</div>
-                            <div>card 2</div>
-                            <div>card 2</div>
-                            <div>card 2</div>
-                            <div>card 2</div>
-                            <div>card 2</div>
-                        </Card>
-
-                    </Grid>
-
-                    <Grid item xs={12} sm={4}>
-                        <Card style={{margin: 10, padding: 10}}>
-                            <div>card 3</div>
-                            <div>card 3</div>
-                            <div>card 3</div>
-                            <div>card 3</div>
-                            <div>card 3</div>
-                            <div>card 3</div>
-                            <div>card 3</div>
-                        </Card>
-                    </Grid>
-
-                    <Grid item xs={12} sm={7}>
-                        <Card style={{margin: 10, padding: 10}}>
-                            <Chart
-                                width={'500px'}
-                                height={'400px'}
-                                chartType="LineChart"
-                                data={this.state.dados}
-                                options={{
-                                    hAxis: {
-                                        title: 'Time',
-                                    },
-                                    vAxis: {
-                                        title: 'Popularity',
-                                    }
-                                }}
-                                rootProps={{'data-testid': '2'}}
-                            />
-                        </Card>
-                    </Grid>
-
-                    <Grid item xs={12} sm={5}>
-                        <Card style={{margin: 10, padding: 10}}>
-                            <Chart
-                                width={'500px'}
-                                height={'300px'}
-                                chartType="PieChart"
-                                loader={<div>Loading Chart</div>}
-                                data={[
-                                    ['Task', 'Hours per Day'],
-                                    ['Work', 11],
-                                    ['Eat', 2],
-                                    ['Commute', 2],
-                                    ['Watch TV', 2],
-                                    ['Sleep', 7],
-                                ]}
-                                options={{
-                                    title: 'My Daily Activities',
-                                }}
-                                rootProps={{'data-testid': '1'}}
-                            />
-                        </Card>
-                    </Grid>
-
-
-                    <Grid item xs={12} sm={7}>
-                        <Card style={{margin: 10, padding: 10}}>
-                            <Chart
-                                width={'500px'}
-                                height={'300px'}
-                                chartType="BarChart"
-                                loader={<div>Loading Chart</div>}
-                                data={[
-                                    ['City', '2010 Population', '2000 Population'],
-                                    ['New York City, NY', 8175000, 8008000],
-                                    ['Los Angeles, CA', 3792000, 3694000],
-                                    ['Chicago, IL', 2695000, 2896000],
-                                    ['Houston, TX', 2099000, 1953000],
-                                    ['Philadelphia, PA', 1526000, 1517000],
-                                ]}
-                                options={{
-                                    title: 'Population of Largest U.S. Cities',
-                                    chartArea: {width: '50%'},
-                                    hAxis: {
-                                        title: 'Total Population',
-                                        minValue: 0,
-                                    },
-                                    vAxis: {
-                                        title: 'City',
-                                    },
-                                }}
-                                // For tests
-                                rootProps={{'data-testid': '1'}}
-                            />
-                        </Card>
-
+                    <Grid item xs={12} sm={6}>
+                        {showLead && <DadosLead lead={lead} editable={false}/>}
                     </Grid>
                 </Grid>
-            </Paper>
+            </div>
         )
+
     }
 }
 
-export default Dashboard;
+export default Home;
