@@ -1,7 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/database";
 import { Lead, InfoPessoal, ProximaAcao, ContatoLead,
-  EnumTipoConta, EnumTipoAcao, EnumOrigemLead, EnumFormaContato } from "../model/Lead";
+  EnumTipoConta, EnumTipoAcao, EnumPreScore, EnumOrigemLead, EnumFormaContato } from "../model/Lead";
 import { StatusLeadAtivo } from "../model/StatusLead";
 
 const pathLeads = 'Leads';
@@ -86,6 +86,7 @@ class DataHandler {
             'Brasileiro',
           ),
           EnumOrigemLead.marketing,
+          EnumPreScore.value,
           new Date().getTime(),
           [],
           'Murillo Douglas',
