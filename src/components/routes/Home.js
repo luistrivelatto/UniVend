@@ -11,7 +11,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
+import { getDuracaoDesdeUltimoContato, getDuracaoTotal, isLeadPendente,
+  isLeadEmAndamento, getDescricaoProximaAcaoOuStatus } from "../../model/Lead";
+import { getHumanReadableDuration } from '../../utils/utils';
 
 class Home extends Component {
 
@@ -25,7 +27,6 @@ class Home extends Component {
 
     async componentDidMount() {
         let leads = await DataHandler.getAllLeads();
-        console.log("AQUIIIIIIIIII", leads)
         this.setState({
             loading: false,
             leads
@@ -39,8 +40,7 @@ class Home extends Component {
     handleClickAtendimento = (id) => {
         console.log(id)
     }
-
-
+    
     render() {
         const {leads} = this.state
         if (this.state.loading) {
@@ -66,15 +66,17 @@ class Home extends Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {leads.map((lead) => (
+                                        {leads
+                                          .filter((lead) => isLeadPendente(lead))
+                                          .map((lead) => (
                                             <TableRow key={lead.id} onClick={() => {
                                                 this.handleClickPendente(lead.id)
                                             }}>
                                                 <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
                                                 <TableCell>{lead.listaContatos.length}</TableCell>
-                                                <TableCell>{'2 min'}</TableCell>
-                                                <TableCell>{'5 min'}</TableCell>
-                                                <TableCell>{'whatsapp'}</TableCell>
+                                                <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
+                                                <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
+                                                <TableCell>{getDescricaoProximaAcaoOuStatus(lead)}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -100,15 +102,17 @@ class Home extends Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {leads.map((lead) => (
+                                        {leads
+                                          .filter((lead) => isLeadEmAndamento(lead))
+                                          .map((lead) => (
                                             <TableRow key={lead.id} onClick={() => {
                                                 this.handleClickAtendimento(lead.id)
                                             }}>
                                                 <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
                                                 <TableCell>{lead.listaContatos.length}</TableCell>
-                                                <TableCell>{'2 min'}</TableCell>
-                                                <TableCell>{'5 min'}</TableCell>
-                                                <TableCell>{'whatsapp'}</TableCell>
+                                                <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
+                                                <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
+                                                <TableCell>{getDescricaoProximaAcaoOuStatus(lead)}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>

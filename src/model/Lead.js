@@ -1,8 +1,13 @@
+import { StatusLeadAtivo, StatusLeadCongelado, StatusLeadRepassadoParaVenda,
+  StatusLeadVendaFechada, StatusLeadCongeladoAposRepasseVenda,
+  EnumTipoStatusLead, EnumMotivoCongelado } from './StatusLead';
+import { getHumanReadableDuration } from '../utils/utils';
+
 function Lead(
 	listaContatos,			// array de ContatoLead
 	infoPessoal,			// obj do tipo InfoPessoal
 	origemLead,				// EnumOrigemLead
-	dataOrigemLead,			// obj do tipo Date
+	dataOrigemLead,			// timestamp
 	valoresMatriz,			// array de [dynamic] com os valores da matriz
 	nomeSdrResponsavel,		// String
 	proximaAcao,			// obj do tipo ProximaAcao (pode ser null)
@@ -20,13 +25,57 @@ function Lead(
 	};
 }
 
+function getContatoMaisNoFuturo(lead) {
+  if(lead.listaContatos.length == 0) {
+    return null;
+  }
+  return lead.listaContatos.reduce((acc, val) => acc.timestamp > val.timestamp ? acc : val, lead.listaContatos[0]);
+}
+
+/// Retorna null se nunca foi feito contato ou o tempo em ms
+function getDuracaoDesdeUltimoContato(lead) {
+  if(lead.listaContatos.length == 0) {
+    return null;
+  }
+  return new Date() - getContatoMaisNoFuturo(lead).timestamp;
+}
+
+/// Retorna o tempo em ms
+function getDuracaoTotal(lead) {
+  return new Date() - lead.dataOrigemLead;
+}
+
+function isLeadPendente(lead) {
+  return lead.status.tipo == EnumTipoStatusLead.ativo &&
+         (lead.proximaAcao == null ||
+          lead.proximaAcao.timestamp < new Date().getTime());
+}
+
+function isLeadEmAndamento(lead) {
+  return lead.status.tipo == EnumTipoStatusLead.ativo &&
+         (lead.proximaAcao != null &&
+          lead.proximaAcao.timestamp >= new Date().getTime());
+}
+
+function getDescricaoProximaAcaoOuStatus(lead) {
+  if(lead.proximaAcao == null) {
+    return '-';
+  }
+  
+  if(isLeadPendente(lead)) {
+    return EnumTipoAcao.toString[lead.proximaAcao.tipoAcao];
+  }
+  return EnumTipoAcao.toString[lead.proximaAcao.tipoAcao] + ' em '
+      + getHumanReadableDuration(lead.proximaAcao.timestamp - new Date());
+}
+
 function InfoPessoal(
   tipo,         // EnumTipoConta        
   nomeConta,    // String
   CPF_CNPJ,     // String
   email,        // String
   telefone,     // String
-  dataNascimento,   // obj do tipo Date
+  dataNascimento,   // timestamp
   cidade,       // String
   nacionalidade // String
 ) {
@@ -44,18 +93,18 @@ function InfoPessoal(
 
 function ProximaAcao(
 	tipoAcao,	// EnumTipoAcao
-	data		// obj do tipo Date
+	timestamp		// timestamp
 ) {
 	return {
 		tipoAcao,
-		data
+		timestamp
 	};
 }
 
 function ContatoLead(
 	formaContato,			// EnumFormaContato
 	nomeSdrResponsavel,		// String
-	timestamp,				// obj do tipo Date
+	timestamp,				// timestamp
 	observacoes				// String
 ) {
 	return {
@@ -75,7 +124,13 @@ var EnumTipoAcao = {
 	ligar: 0,
 	enviarWhatsapp: 1,
 	enviarEmail: 2,
-	aguardarResposta: 3
+	aguardarResposta: 3,
+  toString: [
+    'Ligar',
+    'Enviar WhatsApp',
+    'Enviar Email',
+    'Aguardar Resposta'
+  ]
 };
 
 var EnumOrigemLead = {
@@ -93,4 +148,6 @@ var EnumFormaContato = {
 };
 
 export { Lead, InfoPessoal, ProximaAcao, ContatoLead,
-  EnumTipoConta, EnumTipoAcao, EnumOrigemLead, EnumFormaContato };
+  EnumTipoConta, EnumTipoAcao, EnumOrigemLead, EnumFormaContato,
+  getDuracaoDesdeUltimoContato, getDuracaoTotal, isLeadPendente,
+  isLeadEmAndamento, getDescricaoProximaAcaoOuStatus };

@@ -11,8 +11,28 @@ function stableSort(array, cmp) {
 // data: Date
 // Retorna dia formatado
 function getFormattedDate(data) {
-  return ("0" + data.getDate()).substr(-2) + "/" 
-    + ("0" + (data.getMonth() + 1)).substr(-2) + "/" + data.getFullYear();
+  let date = new Date(data);
+  return ("0" + date.getDate()).substr(-2) + "/" 
+    + ("0" + (date.getMonth() + 1)).substr(-2) + "/" + date.getFullYear();
 }
 
-export { stableSort, formatPrice, roundToTwo, getFormattedDate };
+function getHumanReadableDuration(milisseconds) {
+  const oneMinute = 1000 * 60;
+  const oneHour = oneMinute * 60;
+  const oneDay = oneHour * 24;
+  
+  if(milisseconds < oneMinute) {
+    return '1 minuto';
+  } else if(milisseconds < oneHour) {
+    let tempo = Math.round(milisseconds / oneMinute);
+    return tempo + ' minuto' + (tempo > 1 ? 's' : '');
+  } else if(milisseconds < oneDay) {
+    let tempo = Math.round(milisseconds / oneHour);
+    return tempo + ' hora' + (tempo > 1 ? 's' : '');
+  } else {
+    let tempo = Math.round(milisseconds / oneDay);
+    return tempo + ' dia' + (tempo > 1 ? 's' : '');
+  }
+}
+
+export { stableSort, getFormattedDate, getHumanReadableDuration };
