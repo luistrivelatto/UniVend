@@ -5,19 +5,19 @@ import TextField from '@material-ui/core/TextField';
 import {getFormattedDate} from '../../utils/utils'
 import { EnumOrigemLead } from '../../model/Lead';
 
+
 class DadosLead extends Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
 
-
     render() {
         const {lead} = this.props;
 
         return (
             <Paper style={{margin: 5, padding: 15}}>
-                <Typography style={{fontSize: 18, fontWeight: 'bold'}}>Dados do Lead: </Typography>
+                <Typography style={{fontSize: 18, fontWeight: 'bold'}}>Dados do Lead:</Typography>
                 <TextField
                     onChange={this.handleChangeInput}
                     name={'nome'}

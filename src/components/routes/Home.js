@@ -14,26 +14,19 @@ import {
     isLeadEmAndamento, getDescricaoProximaAcaoOuStatus
 } from "../../model/Lead";
 import {getHumanReadableDuration} from '../../utils/utils';
-
+import ChartsPage from '../widgets/ChartsPage';
+import { Pie } from 'react-chartjs-2';
 class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             loading: true,
-            leads: []
+            leads: [],
+            teste: {}
         };
     }
 
-    colors = (color) => {
-        if(color=="green"){
-            return "#38E896"
-        }else if(color=="yellow"){
-            return "#EAEB5F"
-        }else{
-            return "#FF2922"
-        }
-    }
 
     async componentDidMount() {
         let leads = await DataHandler.getAllLeads();
@@ -64,18 +57,19 @@ class Home extends Component {
             );
         }
 
-
         return (
             <main id='app'>
                 <Paper style={{margin: 20, padding: 10}}>
                     <Grid container>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={6} sm={7}>
                             <div>
-                                <Typography style={{fontSize: 18}}>Pendentes</Typography>
+                                <Typography color="primary" style={{fontSize: 18, paddingLeft: 20}}>Pendentes</Typography>
+                                <Paper style={{margin: 20, padding: 10, boxShadow: "10 10 10 black"}}>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Nome</TableCell>
+                                            <TableCell align="center"></TableCell>
+                                            <TableCell align="right">Nome</TableCell>
                                             <TableCell align="right">Nº Contatos</TableCell>
                                             <TableCell align="right">Último Contato</TableCell>
                                             <TableCell align="right">Tempo Total</TableCell>
@@ -86,10 +80,20 @@ class Home extends Component {
                                         {leads
                                             .filter((lead) => isLeadPendente(lead))
                                             .map((lead) => (
-                                                <TableRow style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}} key={lead.id} onClick={() => {
+                                                <TableRow key={lead.id} onClick={() => {
                                                     this.handleClickPendente(lead.id)
                                                 }}>
-                                                    <TableCell >{lead.infoPessoal.nomeConta}</TableCell>
+                                                    {/* <TableCell style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}} >{lead.infoPessoal.nomeConta}</TableCell> */}
+                                                    <TableCell><div style={
+                                                        {
+                                                            background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F",
+                                                            borderRadius: "50%",
+                                                            color: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"
+                                                        }                                                        
+                                                    }>
+                                                        .....
+                                                    </div></TableCell>
+                                                    <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
                                                     <TableCell>{lead.listaContatos.length}</TableCell>
                                                     <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
                                                     <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
@@ -98,8 +102,16 @@ class Home extends Component {
                                             ))}
                                     </TableBody>
                                 </Table>
+                                </Paper>
                             </div>
                         </Grid>
+                        <Grid item xs={6} sm={5}>
+                            <Typography color='primary' style={{fontSize: 18, paddingLeft: 20}}>Resumo dos Leads</Typography>
+                            <Paper style={{margin: 20, padding: 10, boxShadow: "10 10 10 black"}}>
+                                <ChartsPage>
+                                </ChartsPage>
+                            </Paper>
+                        </Grid>                      
                     </Grid>
                 </Paper>
 
@@ -111,7 +123,6 @@ class Home extends Component {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>Nome</TableCell>
                                             <TableCell align="right">Nº Contatos</TableCell>
                                             <TableCell align="right">Último Contato</TableCell>
                                             <TableCell align="right">Tempo Total</TableCell>
@@ -122,10 +133,10 @@ class Home extends Component {
                                         {leads
                                             .filter((lead) => isLeadEmAndamento(lead))
                                             .map((lead) => (
-                                                <TableRow style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}} key={lead.id} onClick={() => {
+                                                <TableRow key={lead.id} onClick={() => {
                                                     this.handleClickAtendimento(lead.id)
                                                 }}>
-                                                    <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
+                                                    <TableCell style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}}>{lead.infoPessoal.nomeConta}</TableCell>
                                                     <TableCell>{lead.listaContatos.length}</TableCell>
                                                     <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
                                                     <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
