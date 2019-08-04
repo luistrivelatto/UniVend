@@ -58,7 +58,14 @@ var EnumTipoStatusLead = {
 	congelado: 1,
 	repassadoParaVenda: 2,
 	vendaFechada: 3,
-	congeladoAposRepasseVenda: 4
+	congeladoAposRepasseVenda: 4,
+  toString: [
+    'Ativo',
+    'Congelado',
+    'Repassado para venda',
+    'Venda finalizada',
+    'Congelado apos repasse para venda'
+  ]
 };
 
 var EnumMotivoCongelado = {

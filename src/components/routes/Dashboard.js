@@ -9,15 +9,16 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { Spinner } from '@blueprintjs/core';
 import Chart from 'react-google-charts';
 import {
     getDuracaoDesdeUltimoContato, getDuracaoTotal, isLeadPendente,
     isLeadEmAndamento, getDescricaoProximaAcaoOuStatus,
-    leadEstaDentroDePeriodoDeTempo, leadNovoDentroDePeriodoDeTempo
+    leadEstaDentroDePeriodoDeTempo, leadNovoDentroDePeriodoDeTempo, EnumOrigemLead
 } from "../../model/Lead";
-import {EnumTipoStatusLead} from "../../model/StatusLead";
+import {EnumTipoStatusLead, EnumMotivoCongelado} from "../../model/StatusLead";
 import {getHumanReadableDuration, timestampDentroDePeriodo, arrayAverage} from '../../utils/utils';
 
 class Dashboard extends Component {
@@ -27,6 +28,8 @@ class Dashboard extends Component {
         this.state = {
             loading: true,
             leads: null,
+            comecoPeriodoString: '2019-08-01',
+            fimPeriodoString: '2019-08-04',
             comecoPeriodo: new Date('2019-08-01'),
             fimPeriodo: new Date(),
         };
@@ -40,7 +43,7 @@ class Dashboard extends Component {
         });
     }
     
-    getTotalLeads() {
+    getLeadsPeriodo() {
       return this.state.leads.filter((lead) => leadEstaDentroDePeriodoDeTempo(lead, this.state.comecoPeriodo, this.state.fimPeriodo));
     }
     
@@ -103,53 +106,144 @@ class Dashboard extends Component {
       return getHumanReadableDuration(tempoMedio);
     }
     
+    getIndiceDiaNoPeriodo(timestamp) {
+      const milisPorDia = 1000 * 60 * 60 * 24;
+      return Math.floor((timestamp - this.state.comecoPeriodo) / milisPorDia);
+    }
+    
     getDataGraficoDesempenhoPorDia() {
-      return [
-          ['x', 'Novos Leads', 'Contatos Realizados', 'Vendas Fechadas', 'Congelados'],
-          [0, 5, 2, 3, 6],
-          [1, 10, 5, 3, 4],
-          [2, 20, 15, 3, 8],
-          [3, 17, 9, 4, 1],
+      const milisPorDia = 1000 * 60 * 60 * 24;
+      let numDias = Math.ceil((this.state.fimPeriodo - this.state.comecoPeriodo) / milisPorDia);
+      
+      let novosLeads = new Array(numDias).fill(0);
+      let contatosRealizados = new Array(numDias).fill(0);
+      let vendasFechadas = new Array(numDias).fill(0);
+      let leadsCongelados = new Array(numDias).fill(0);
+      
+      for(var novoLead of this.getNovosLeads()) {
+        novosLeads[this.getIndiceDiaNoPeriodo(novoLead.dataOrigemLead)]++;
+      }
+      
+      for(var contato of this.getContatosRealizados()) {
+        contatosRealizados[this.getIndiceDiaNoPeriodo(contato.timestamp)]++;
+      }
+      
+      for(var lead of this.getLeadsPeriodo()) {
+        if(lead.status.tipo == EnumTipoStatusLead.vendaFechada) {
+          vendasFechadas[this.getIndiceDiaNoPeriodo(lead.status.dataFechouVenda)]++;
+        } else if(lead.status.tipo == EnumTipoStatusLead.congelado) {
+          leadsCongelados[this.getIndiceDiaNoPeriodo(lead.status.dataDeixouDeSerLead)]++;
+        }
+      }
+      
+      let dados = [
+        ['x', 'Novos Leads', 'Contatos Realizados', 'Vendas Fechadas', 'Congelados']
       ];
+      
+      for(var i = 0; i < numDias; i++) {
+        dados.push([
+          i, novosLeads[i], contatosRealizados[i], vendasFechadas[i], leadsCongelados[i]
+        ]);
+      }
+      
+      return dados;
     }
     
     getDataGraficoResultadoDosLeads() {
+      let leads = this.getLeadsPeriodo();
+      let resultados = new Array(5).fill(0);
+      
+      for(var lead of leads) {
+        resultados[lead.status.tipo]++;
+      }
+      
       return [
           ['Resultado', 'Quantidade'],
-          ['Ativo', 11],
-          ['Repassado para vendas', 2],
-          ['Congelado', 2],
+          [EnumTipoStatusLead.toString[EnumTipoStatusLead.ativo], resultados[EnumTipoStatusLead.ativo]],
+          [EnumTipoStatusLead.toString[EnumTipoStatusLead.congelado], resultados[EnumTipoStatusLead.congelado]],
+          [EnumTipoStatusLead.toString[EnumTipoStatusLead.repassadoParaVenda], resultados[EnumTipoStatusLead.repassadoParaVenda]],
+          [EnumTipoStatusLead.toString[EnumTipoStatusLead.vendaFechada], resultados[EnumTipoStatusLead.vendaFechada]],
+          [EnumTipoStatusLead.toString[EnumTipoStatusLead.congeladoAposRepasseVenda], resultados[EnumTipoStatusLead.congeladoAposRepasseVenda]],
       ];
     }
     
     getDataGraficoMotivosLeadsCongelados() {
+      let leads = this.getLeadsPeriodo().filter((lead) => lead.status.tipo == EnumTipoStatusLead.congelado);
+      let resultados = new Array(5).fill(0);
+      
+      for(var lead of leads) {
+        resultados[lead.status.motivo]++;
+      }
+      
       return [
           ['Motivo', 'Quantidade'],
-          ['Preco', 11],
-          ['Concorrente', 5],
-          ['Não tinha interesse', 2],
-          ['Outro', 10],
+          [EnumMotivoCongelado.toString[EnumMotivoCongelado.concorrente], resultados[EnumMotivoCongelado.concorrente]],
+          [EnumMotivoCongelado.toString[EnumMotivoCongelado.preco], resultados[EnumMotivoCongelado.preco]],
+          [EnumMotivoCongelado.toString[EnumMotivoCongelado.semInteresse], resultados[EnumMotivoCongelado.semInteresse]],
+          [EnumMotivoCongelado.toString[EnumMotivoCongelado.naoConseguiuContato], resultados[EnumMotivoCongelado.naoConseguiuContato]],
+          [EnumMotivoCongelado.toString[EnumMotivoCongelado.outro], resultados[EnumMotivoCongelado.outro]],
       ];
     }
     
     getDataGraficoLeadsPorCidade() {
-      return [
-          ['Cidade', 'Quantidade'],
-          ['Cascavel', 11],
-          ['Toledo', 5],
-          ['Corbelia', 2],
+      let leads = this.getLeadsPeriodo();
+      let cidadesCont = {};
+      
+      for(var lead of leads) {
+        let cidade = lead.infoPessoal.cidade;
+        if(cidade != undefined) {
+          if(cidadesCont[cidade] == undefined) {
+            cidadesCont[cidade] = 0;
+          }
+          cidadesCont[cidade]++;
+        }
+      }
+      
+      let dados = [
+        ['Cidade', 'Quantidade'],
       ];
+      
+      for(var cidade in cidadesCont) {
+        dados.push([
+          cidade, cidadesCont[cidade]
+        ]);
+      }
+      
+      return dados;
     }
     
     getDataGraficoOrigemDosLeads() {
+      let leads = this.getLeadsPeriodo();
+      let resultados = new Array(4).fill(0);
+      
+      for(var lead of leads) {
+        resultados[lead.origemLead]++;
+      }
+      
       return [
           ['Origem', 'Quantidade'],
-          ['Marketing', 11],
-          ['Simulador', 5],
-          ['Site', 2],
+          [EnumOrigemLead.toString[EnumOrigemLead.marketing], resultados[EnumOrigemLead.marketing]],
+          [EnumOrigemLead.toString[EnumOrigemLead.simulador], resultados[EnumOrigemLead.simulador]],
+          [EnumOrigemLead.toString[EnumOrigemLead.formularioSite], resultados[EnumOrigemLead.formularioSite]],
+          [EnumOrigemLead.toString[EnumOrigemLead.bioMeek], resultados[EnumOrigemLead.bioMeek]],
       ];
     }
 
+    handleChangeDate = (event) => {
+      
+      if(event.target.name == 'comecoPeriodoString') {
+        this.setState({
+          comecoPeriodo: Date.parse(event.target.value),
+          comecoPeriodoString: event.target.value
+        });
+      } else {
+        this.setState({
+          fimPeriodo: Date.parse(event.target.value),
+          fimPeriodoString: event.target.value
+        });
+      }
+    }
+    
     render() {
         const {leads} = this.state;
         if (this.state.loading) {
@@ -161,14 +255,49 @@ class Dashboard extends Component {
         return (
             <Paper style={{margin: 20, padding: 15}}>
                 <Grid container>
+                
                     <Grid item xs={12} sm={12}>
                         <Typography style={{fontSize: 18, fontWeight: 'bold'}}> Dashboard Gerencial</Typography>
                     </Grid>
+                
+                    <Grid item xs={12} sm={6}>
+                          <TextField
+                                onChange={this.handleChangeDate}
+                                name={'comecoPeriodoString'}
+                                label="Começo do Período"
+                                value={this.state.comecoPeriodoString}
+                                type="date"
+                                style={{paddingLeft: 8}}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                fullWidth
+                            />
+                    </Grid>
+                    
+                    <Grid item xs={12} sm={6}>
+                          <TextField
+                                onChange={this.handleChangeDate}
+                                name={'fimPeriodoString'}
+                                label="Fim do Período"
+                                value={this.state.fimPeriodoString}
+                                type="date"
+                                style={{paddingLeft: 8}}
+                                margin="normal"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                fullWidth
+                            />
+                    </Grid>
+                    
+                    <br/><br/>
 
                     <Grid item xs={12} sm={2}>
                         <Card style={{margin: 6, padding: 0}}>
                             <div><h4 align="center">TOTAL DE LEADS</h4></div>
-                            <div><h1 align="center">{ this.getTotalLeads().length }</h1></div>
+                            <div><h1 align="center">{ this.getLeadsPeriodo().length }</h1></div>
                         </Card>
                     </Grid>
                     <Grid item xs={12} sm={2}>
