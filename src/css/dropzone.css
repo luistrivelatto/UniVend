@@ -1,0 +1,41 @@
+.react-dropzone-styled {
+  min-height: 300px;
+  border: 8px dashed #ddd;
+  border-radius: 8px;
+}
+
+.react-dropzone-styled .dropzone-content {
+  text-align: center;
+  color: #777;
+  padding: 30px 15px;
+}
+
+.react-dropzone-styled p {
+  margin: 1rem 0;
+}
+
+.react-dropzone-styled .icon-line {
+  font-size: 3em;
+}
+
+.react-dropzone-styled .main-line {
+  font-size: 1.8em;
+}
+
+.react-dropzone-styled .browse-button {
+  color: #33c2e6;
+  border: 0.1em solid currentColor;
+  border-radius: 3px;
+  padding: 0.4em 0.8em;
+  background: none;
+  cursor: pointer;
+  font-size: 1.5em;
+}
+
+.react-dropzone-styled .browse-button:hover {
+  color: #26a9ca;
+}
+
+.react-dropzone-styled .browse-button:active {
+  color: #1f8da8;
+}
