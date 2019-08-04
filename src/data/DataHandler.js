@@ -91,7 +91,28 @@ class DataHandler {
           'Murillo Douglas',
           null,
           StatusLeadAtivo()
-        )
+        ),
+        Lead(
+          [
+          ],
+          InfoPessoal(
+            EnumTipoConta.pessoaJuridica,
+            'Unic Apps',
+            '0500.677.810-0001-20',
+            'uniccascavel@gmail.com',
+            '99133-5060',
+            new Date('01-05-2019').getTime(),
+            'Cascavel',
+            'Brasileiro',
+          ),
+          EnumOrigemLead.marketing,
+          new Date().getTime(),
+          [],
+          'Murillo Douglas',
+          null,
+          StatusLeadAtivo()
+        ),
+        
       ];
       
       for(var lead of leads) {      
