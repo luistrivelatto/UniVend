@@ -7,7 +7,7 @@ import Lead from './Lead';
 const Routes = () => {
     return (
         <Switch>
-            <Route path="/" component={Home}/>
+            <Route exact path="/" component={Home}/>
             <Route path="/lead/:id" component={Lead}/>
             <Route path="*" component={NotFound}/>
         </Switch>
