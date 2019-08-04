@@ -9,9 +9,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { getDuracaoDesdeUltimoContato, getDuracaoTotal, isLeadPendente,
-  isLeadEmAndamento, getDescricaoProximaAcaoOuStatus } from "../../model/Lead";
-import { getHumanReadableDuration } from '../../utils/utils';
+import {
+    getDuracaoDesdeUltimoContato, getDuracaoTotal, isLeadPendente,
+    isLeadEmAndamento, getDescricaoProximaAcaoOuStatus
+} from "../../model/Lead";
+import {getHumanReadableDuration} from '../../utils/utils';
 
 class Home extends Component {
 
@@ -19,7 +21,7 @@ class Home extends Component {
         super(props);
         this.state = {
             loading: true,
-            leads: [{}, {}]
+            leads: []
         };
     }
 
@@ -29,6 +31,7 @@ class Home extends Component {
             loading: false,
             leads
         });
+        // DataHandler.populateDatabase()
     }
 
     handleClickPendente = (id) => {
@@ -38,7 +41,7 @@ class Home extends Component {
     handleClickAtendimento = (id) => {
         console.log(id)
     }
-    
+
     render() {
         const {leads} = this.state
         if (this.state.loading) {
@@ -46,6 +49,7 @@ class Home extends Component {
                 <Loading/>
             );
         }
+
         return (
             <main id='app'>
                 <Paper style={{margin: 20, padding: 10}}>
@@ -65,18 +69,18 @@ class Home extends Component {
                                     </TableHead>
                                     <TableBody>
                                         {leads
-                                          .filter((lead) => isLeadPendente(lead))
-                                          .map((lead) => (
-                                            <TableRow key={lead.id} onClick={() => {
-                                                this.handleClickPendente(lead.id)
-                                            }}>
-                                                <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
-                                                <TableCell>{lead.listaContatos.length}</TableCell>
-                                                <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
-                                                <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
-                                                <TableCell>{getDescricaoProximaAcaoOuStatus(lead)}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                            .filter((lead) => isLeadPendente(lead))
+                                            .map((lead) => (
+                                                <TableRow key={lead.id} onClick={() => {
+                                                    this.handleClickPendente(lead.id)
+                                                }}>
+                                                    <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
+                                                    <TableCell>{lead.listaContatos.length}</TableCell>
+                                                    <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
+                                                    <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
+                                                    <TableCell>{getDescricaoProximaAcaoOuStatus(lead)}</TableCell>
+                                                </TableRow>
+                                            ))}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -101,18 +105,18 @@ class Home extends Component {
                                     </TableHead>
                                     <TableBody>
                                         {leads
-                                          .filter((lead) => isLeadEmAndamento(lead))
-                                          .map((lead) => (
-                                            <TableRow style={{color: "#fafe12"}} key={lead.id} onClick={() => {
-                                                this.handleClickAtendimento(lead.id)
-                                            }}>
-                                                <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
-                                                <TableCell>{lead.listaContatos.length}</TableCell>
-                                                <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
-                                                <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
-                                                <TableCell>{getDescricaoProximaAcaoOuStatus(lead)}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                            .filter((lead) => isLeadEmAndamento(lead))
+                                            .map((lead) => (
+                                                <TableRow key={lead.id} onClick={() => {
+                                                    this.handleClickAtendimento(lead.id)
+                                                }}>
+                                                    <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
+                                                    <TableCell>{lead.listaContatos.length}</TableCell>
+                                                    <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
+                                                    <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
+                                                    <TableCell>{getDescricaoProximaAcaoOuStatus(lead)}</TableCell>
+                                                </TableRow>
+                                            ))}
                                     </TableBody>
                                 </Table>
                             </div>
