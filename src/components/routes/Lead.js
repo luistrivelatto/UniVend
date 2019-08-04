@@ -83,8 +83,7 @@ class Lead extends Component {
         } else {
             alert('Você precisa tomar um ação')
         }
-
-
+        this.resetStates()
     }
 
     async cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, dataRecontato) {
