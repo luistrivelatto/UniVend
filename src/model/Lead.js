@@ -25,19 +25,12 @@ function Lead(
 	};
 }
 
-function getContatoMaisNoFuturo(lead) {
-  if(lead.listaContatos.length == 0) {
-    return null;
-  }
-  return lead.listaContatos.reduce((acc, val) => acc.timestamp > val.timestamp ? acc : val, lead.listaContatos[0]);
-}
-
 /// Retorna null se nunca foi feito contato ou o tempo em ms
 function getDuracaoDesdeUltimoContato(lead) {
   if(lead.listaContatos.length == 0) {
     return null;
   }
-  return new Date() - getContatoMaisNoFuturo(lead).timestamp;
+  return new Date() - lead.listaContatos.slice(-1)[0].timestamp;
 }
 
 /// Retorna o tempo em ms
@@ -117,7 +110,11 @@ function ContatoLead(
 
 var EnumTipoConta = {
   pessoaFisica: 0,
-  pessoaJuridica: 1
+  pessoaJuridica: 1,
+  toString: [
+    'Pessoa Física',
+    'Pessoa Jurídica'
+  ]
 };
 
 var EnumTipoAcao = {
@@ -137,14 +134,26 @@ var EnumOrigemLead = {
 	marketing: 0,
 	simulador: 1,
 	formularioSite: 2,
-	bioMeek: 3
+	bioMeek: 3,
+  toString: [
+    'Marketing',
+    'Simulador',
+    'Formulário do site',
+    'BioMeek'
+  ]
 };
 
 var EnumFormaContato = {
 	telefone: 0,
 	email: 1,
 	whatsapp: 2,
-	pessoalmente: 3
+	pessoalmente: 3,
+  toString: [
+    'Telefone',
+    'Email',
+    'WhatsApp',
+    'Pessoalmente'
+  ]
 };
 
 export { Lead, InfoPessoal, ProximaAcao, ContatoLead,
