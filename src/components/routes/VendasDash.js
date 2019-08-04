@@ -10,7 +10,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Switch from '@material-ui/core/Switch';
+
+
 import DadosLead from '../widgets/DadosLead'
 
 import {
@@ -25,7 +30,9 @@ class Home extends Component {
         super(props);
         this.state = {
             loading: true,
-            leads: []
+            leads: [],
+            open: false,
+            venda: false
         };
     }
 
@@ -39,6 +46,11 @@ class Home extends Component {
         }
     }
 
+    handleChangeVenda = () => {
+        const {venda} = this.state
+        this.setState({venda: !venda})
+    }
+
     async componentDidMount() {
         let leads = await DataHandler.getAllLeads();
         this.setState({
@@ -49,20 +61,20 @@ class Home extends Component {
     }
 
     handleClickPendente = (lead) => {
-        this.setState({lead: lead})
+        const {open} = this.state
+        this.setState({lead: lead, open: !open})
     }
 
 
+    handleModal = () => {
+        const {open} = this.state
+        this.setState({
+            open: !open
+        })
+    }
+
     render() {
-        const {leads, lead} = this.state
-        let showLead
-        if (typeof lead !== 'undefined') {
-            showLead = true
-        } else {
-            showLead = false
-
-        }
-
+        const {leads, lead, open, venda} = this.state
         if (this.state.loading) {
             return (
                 <Loading/>
@@ -70,14 +82,79 @@ class Home extends Component {
         }
 
         return (
-            <div id='app'>
+            <div>
+                <Modal
+                    disableBackdropClick={false}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    open={open}
+                    onClose={this.handleModal}
+                >
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "5%",
+
+                    }}>
+                        {open &&
+                        <Card style={{width: "50%", padding: 20}}>
+                            <div style={{margin: 20, padding: 15}}>
+                                <div>
+                                    <Typography align={'center'} style={{fontSize: 18, fontWeight: 'bold'}}> Confirmação
+                                        de
+                                        Venda
+                                    </Typography>
+
+                                    <div>
+                                        <Typography align={'center'} style={{fontSize: 15}}>
+                                            {'Nome: ' + lead.infoPessoal.nomeConta}
+                                        </Typography>
+                                    </div>
+
+                                    <div>
+                                        <Typography align={'center'} style={{fontSize: 15}}>
+                                            {'Telefone: ' + lead.infoPessoal.telefone}
+                                            {console.log(lead)}
+                                        </Typography>
+                                    </div>
+                                    <div>
+                                        <Typography align={'center'} style={{fontSize: 15}}>
+                                            {'CPF/CNPJ: ' + lead.infoPessoal.CPF_CNPJ}
+                                            {console.log(lead)}
+                                        </Typography>
+                                    </div>
+                                    <Grid container>
+                                        <Grid align={'end'} item xs={12} sm={6}>
+                                            <Switch
+                                                checked={venda}
+                                                onChange={() => {
+                                                    this.handleChangeVenda('venda')
+                                                }}
+                                                value="venda"
+                                                color="primary"
+                                                inputProps={{'aria-label': 'primary checkbox'}}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={6}>
+                                            <Typography align={'start'} style={{fontSize: 15, paddingTop: 15}}>
+                                                Venda Foi Fechada?
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            </div>
+                            <div align="center">
+                                <Button variant={"contained"} color={"primary"}
+                                        onClick={this.handleModal}>
+                                    Confirmar
+                                </Button>
+                            </div>
+
+                        </Card>}
+                    </div>
+                </Modal>
                 <Grid container>
                     <Grid item xs={12} sm={6}>
-
-                        <Grid item xs={12} sm={12}>
-                            {showLead && <ConfirmaVenda/>}
-                        </Grid>
-
                         <Grid item xs={12} sm={12}>
                             <Paper style={{margin: 20, padding: 10}}>
                                 <div>
@@ -115,10 +192,6 @@ class Home extends Component {
                                 </div>
                             </Paper>
                         </Grid>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        {showLead && <DadosLead lead={lead} editable={false}/>}
                     </Grid>
                 </Grid>
             </div>
