@@ -36,4 +36,15 @@ function getHumanReadableDuration(milisseconds) {
   }
 }
 
-export { stableSort, getFormattedDate, getHumanReadableDuration };
+function timestampDentroDePeriodo(timestamp, comecoPeriodo, fimPeriodo) {
+  return timestamp > comecoPeriodo && timestamp < fimPeriodo;
+}
+
+function arrayAverage(array) {
+  if(array.length == 0) {
+    return null;
+  }
+  return array.reduce((p, c) => p + c, 0) / array.length;
+}
+
+export { stableSort, getFormattedDate, getHumanReadableDuration, timestampDentroDePeriodo, arrayAverage };
