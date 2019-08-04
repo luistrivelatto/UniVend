@@ -8,6 +8,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 
 
 class Home extends Component {
@@ -51,7 +52,7 @@ class Home extends Component {
                     <Grid container>
                         <Grid item xs={12} sm={6}>
                             <div>
-                                Pendentes
+                                <Typography style={{fontSize: 18}}>Pendentes</Typography>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
@@ -85,7 +86,7 @@ class Home extends Component {
                     <Grid container>
                         <Grid item xs={12} sm={6}>
                             <div>
-                                Em Atendimento
+                                <Typography style={{fontSize: 18}}>Em Atendimento</Typography>
                                 <Table>
                                     <TableHead>
                                         <TableRow>

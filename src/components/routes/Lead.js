@@ -1,6 +1,11 @@
 import React, {Component} from 'react'
 import Loading from '../widgets/Loading';
 import DataHandler from '../../data/DataHandler';
+import ListContatos from '../widgets/ListContatos';
+import DadosLead from '../widgets/DadosLead';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+
 
 class Lead extends Component {
 
@@ -22,6 +27,13 @@ class Lead extends Component {
         });
     }
 
+    handleChangeInput = event => {
+        console.log('name: ', [event.currentTarget.name], 'value', event.currentTarget.value)
+        this.setState({
+            [event.currentTarget.name]: event.currentTarget.value
+        })
+    }
+
     handleClickPendente = (id) => {
         console.log(id)
     }
@@ -39,8 +51,22 @@ class Lead extends Component {
             );
         }
         return (
-            <div>
-                lead
+            <div style={{padding: 10}}>
+                <Grid container>
+                    <Grid item xs={4} sm={6}>
+                        <DadosLead lead={lead}/>
+                    </Grid>
+
+                    <Grid item xs={4} sm={6}>
+                        <ListContatos contatos={lead.listaContatos}/>
+                    </Grid>
+
+
+                    <Grid item xs={8} sm={12}>
+                        <Paper style={{margin: 5, padding: 15}}>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </div>
         )
     }
