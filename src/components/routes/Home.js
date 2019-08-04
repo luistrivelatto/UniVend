@@ -25,6 +25,16 @@ class Home extends Component {
         };
     }
 
+    colors = (color) => {
+        if(color=="green"){
+            return "#38E896"
+        }else if(color=="yellow"){
+            return "#EAEB5F"
+        }else{
+            return "#FF2922"
+        }
+    }
+
     async componentDidMount() {
         let leads = await DataHandler.getAllLeads();
         this.setState({
@@ -42,6 +52,10 @@ class Home extends Component {
         this.props.history.push('lead/' + id)
     }
 
+    setColor = () => {
+
+    }
+
     render() {
         const {leads} = this.state
         if (this.state.loading) {
@@ -49,6 +63,7 @@ class Home extends Component {
                 <Loading/>
             );
         }
+
 
         return (
             <main id='app'>
@@ -71,10 +86,12 @@ class Home extends Component {
                                         {leads
                                             .filter((lead) => isLeadPendente(lead))
                                             .map((lead) => (
-                                                <TableRow key={lead.id} onClick={() => {
+                                                <TableRow style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}} key={lead.id} onClick={() => {
                                                     this.handleClickPendente(lead.id)
                                                 }}>
-                                                    <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
+                                                    {console.log(lead.preScore)}
+                                                    
+                                                    <TableCell >{lead.infoPessoal.nomeConta}</TableCell>
                                                     <TableCell>{lead.listaContatos.length}</TableCell>
                                                     <TableCell>{getHumanReadableDuration(getDuracaoDesdeUltimoContato(lead))}</TableCell>
                                                     <TableCell>{getHumanReadableDuration(getDuracaoTotal(lead))}</TableCell>
@@ -107,7 +124,7 @@ class Home extends Component {
                                         {leads
                                             .filter((lead) => isLeadEmAndamento(lead))
                                             .map((lead) => (
-                                                <TableRow key={lead.id} onClick={() => {
+                                                <TableRow style={{background: lead.preScore >= 0.5 ? "#38E896" : lead.preScore <= 0.3 ? "#FF2922" : "#EAEB5F"}} key={lead.id} onClick={() => {
                                                     this.handleClickAtendimento(lead.id)
                                                 }}>
                                                     <TableCell>{lead.infoPessoal.nomeConta}</TableCell>
