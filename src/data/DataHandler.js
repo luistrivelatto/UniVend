@@ -48,11 +48,19 @@ class DataHandler {
         let data = (await firebase
             .database()
             .ref(pathLeads)
-            .ref(idLead)
+            .child(idLead)
             .once('value'))
             .val();
         
-        return this.formatLeadFromDb(data);
+        return this.formatLeadFromDb(idLead, data);
+    }
+    
+    static async updateLead(lead) {
+      return firebase
+          .database()
+          .ref(pathLeads)
+          .child(lead.id)
+          .update(lead);
     }
     
     static populateDatabase() {

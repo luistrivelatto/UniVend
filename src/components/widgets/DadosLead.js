@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Paper from '@material-ui/core/Paper';
 import {Typography} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
+import {getFormattedDate} from '../../utils/utils'
 
 class DadosLead extends Component {
     constructor(props) {
@@ -67,24 +68,12 @@ class DadosLead extends Component {
                 />
 
                 <TextField
-                    onChange={this.handleChangeInput}
-                    name={'bornDate'}
-                    label="Data de Nascimento"
-                    type='date'
-                    value="11-04-1992"
-                    style={{paddingLeft: 8}}
-                    margin="normal"
-                    fullWidth
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-
-                <TextField
-                    id="date"
-                    label="Birthday"
+                    name="Born date"
+                    label="Born date"
+                    value={getFormattedDate(lead.infoPessoal.dataNascimento)}
+                    InputLabelProps={{shrink: true, required: true}}
                     type="date"
-                    defaultValue="2017-5-24"
+                    defaultValue={lead.infoPessoal.dataNascimento}
                 />
 
                 <TextField
