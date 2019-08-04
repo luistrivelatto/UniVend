@@ -1,5 +1,8 @@
 import {EnumTipoConta} from "./Lead";
 
+const keyFormViaja = 'keyFormViaja';
+const keyFormProfissao = 'keyFormProfissao';
+
 function calculateLeadScorePessoaFisica(respostaViagem, respostaProfissao, idade) {
     let score =
             0.10 * scoreViagem(respostaViagem) +
@@ -37,7 +40,8 @@ var EnumRespostaViagem = {
         1/3,
         2/3,
         1
-    ]
+    ],
+    length: 5
 };
 
 function scoreProfissao(respostaProfissao) {
@@ -66,7 +70,8 @@ var EnumRespostaProfissao = {
         7253,
         1338,
         1300
-    ]
+    ],
+    length: 6
 }
 
 function scoreSinistralidade(idade) {
@@ -98,4 +103,4 @@ function scorePermanencia(idade) {
     return 1;
 }
 
-export default calculateLeadScorePessoaFisica;
+export { calculateLeadScorePessoaFisica, keyFormViaja, keyFormProfissao, EnumRespostaViagem, EnumRespostaProfissao };

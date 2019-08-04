@@ -138,6 +138,15 @@ class Lead extends Component {
             open: !open
         })
     }
+    
+    async onFormValueChanged(name, value) {
+      let lead = this.state.lead;
+      lead.valoresMatriz[name] = value;
+      await DataHandler.updateLead(lead);
+      this.setState({
+        lead
+      });
+    }
 
     render() {
         const {lead, open, formaContato, observacoes, proximaAcao, tipoRecontato, dataRecontato, motivo, subMotivo} = this.state
@@ -157,7 +166,11 @@ class Lead extends Component {
                             </Grid>
 
                             <Grid item xs={8} sm={6}>
-                                <FormFisico/>
+                                <FormFisico
+                                    // javascript things, kind of
+                                    onValueChanged = { (name,value) => { this.onFormValueChanged(name, value); } }
+                                    lead = {lead}
+                                />
                             </Grid>
                         </Grid>
                     </Grid>
