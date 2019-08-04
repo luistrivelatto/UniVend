@@ -71,7 +71,7 @@ class DadosLead extends Component {
                     name={'bornDate'}
                     label="Data de Nascimento"
                     type='date'
-                    defaultValue="11-04-1992"
+                    value="11-04-1992"
                     style={{paddingLeft: 8}}
                     margin="normal"
                     fullWidth
@@ -84,7 +84,7 @@ class DadosLead extends Component {
                     id="date"
                     label="Birthday"
                     type="date"
-                    defaultValue="2017-05-24"
+                    defaultValue="2017-5-24"
                 />
 
                 <TextField

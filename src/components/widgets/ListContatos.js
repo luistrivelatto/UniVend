@@ -3,6 +3,8 @@ import Paper from '@material-ui/core/Paper';
 import {Typography} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import {EnumFormaContato} from "../../model/Lead";
+
 
 class ListContatos extends Component {
     constructor(props) {
@@ -20,11 +22,10 @@ class ListContatos extends Component {
                     <div>
                         <TextField
                             onChange={this.handleChangeInput}
-                            label="Profissão"
-                            value={contato.formaContato}
+                            label="Forma de Contato"
+                            value={EnumFormaContato.toString[contato.formaContato]}
                             style={{paddingLeft: 8}}
                             margin="normal"
-                            fullWidth
                         />
                         <TextField
                             disabled
