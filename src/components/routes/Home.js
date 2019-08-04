@@ -31,6 +31,7 @@ class Home extends Component {
             loading: false,
             leads
         });
+        // DataHandler.populateDatabase()
     }
 
     handleClickPendente = (id) => {

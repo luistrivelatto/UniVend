@@ -73,9 +73,10 @@ class Lead extends Component {
 
     onSubmit = () => {
         const {formaContato, observacoes, proximaAcao, tipoRecontato, dataRecontato, motivo, subMotivo} = this.state
+        console.log(Math.round(dataRecontato.getTime() / 1000))
 
         if (proximaAcao == 1) {
-            this.cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, dataRecontato)
+            this.cadastrarContatoAgendarRecontato(formaContato, observacoes, tipoRecontato, Math.round(dataRecontato.getTime() / 1000))
         } else if (proximaAcao == 3) {
             this.cadastrarContatoFinalizarLead(formaContato, observacoes, motivo, subMotivo)
         } else if (proximaAcao == 2) {
@@ -269,9 +270,12 @@ class Lead extends Component {
                                                             name={'dataRecontato'}
                                                             label="Data de Recontato"
                                                             value={getFormattedDate(dataRecontato)}
-                                                            type="date"
+                                                            type="datetime-local"
                                                             style={{paddingLeft: 8}}
                                                             margin="normal"
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
                                                             fullWidth
                                                         />
                                                     </Grid>
