@@ -207,11 +207,10 @@ class Lead extends Component {
                                             style={{marginTop: 18}}
                                             fullWidth
                                         >
-                                            <MenuItem value={0}>Não</MenuItem>
-                                            <MenuItem value={1}>Telefone</MenuItem>
-                                            <MenuItem value={2}>E-Mail</MenuItem>
-                                            <MenuItem value={3}>Whatsapp</MenuItem>
-                                            <MenuItem value={4}>Pessoalmente</MenuItem>
+                                            <MenuItem value={0}>Telefone</MenuItem>
+                                            <MenuItem value={1}>E-Mail</MenuItem>
+                                            <MenuItem value={2}>Whatsapp</MenuItem>
+                                            <MenuItem value={3}>Pessoalmente</MenuItem>
                                         </Select>
                                     </Grid>
                                     <Grid item xs={12} sm={12}>
@@ -262,6 +261,7 @@ class Lead extends Component {
                                                             <MenuItem value={0}>Telefone</MenuItem>
                                                             <MenuItem value={1}>Whatsapp</MenuItem>
                                                             <MenuItem value={2}>E-mail</MenuItem>
+                                                            <MenuItem value={3}>Aguardar Resposta</MenuItem>
                                                         </Select>
                                                     </Grid>
                                                     <Grid item xs={12} sm={12}>
@@ -298,9 +298,8 @@ class Lead extends Component {
                                                             <MenuItem value={0}>Fechou com concorrente</MenuItem>
                                                             <MenuItem value={1}>Preço</MenuItem>
                                                             <MenuItem value={2}>Não tem interesse</MenuItem>
-                                                            <MenuItem value={3}>Telefone Incorreto</MenuItem>
-                                                            <MenuItem value={4}>Não Conseguiu Contato</MenuItem>
-                                                            <MenuItem value={5}>Outro</MenuItem>
+                                                            <MenuItem value={3}>Não Conseguiu Contato</MenuItem>
+                                                            <MenuItem value={4}>Outro</MenuItem>
                                                         </Select>
                                                     </Grid>
                                                     <Grid item xs={12} sm={12}>
